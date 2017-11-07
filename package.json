@@ -1,0 +1,68 @@
+{
+  "name": "mono-semantic",
+  "version": "0.0.0",
+  "description": "Semantic Release for individual packages of a mono-repo",
+  "main": "lib/index.js",
+  "bin": {
+    "mono-semantic": "bin/mono-semantic.js"
+  },
+  "scripts": {
+    "precommit": "yarn lint && yarn test",
+    "test": "cross-env NODE_ENV=test mocha --reporter dot --require babel-register \"src/**/__tests__/*.js\"",
+    "cover": "nyc yarn test",
+    "lint:js": "eslint -c ./.eslintrc.js 'src/**/*.js'",
+    "flow": "flow check",
+    "lint": "yarn lint:js && yarn flow",
+    "build": "rimraf lib && babel src -d dist --source-maps --ignore __tests__",
+    "prepublish": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackmellis/mono-semantic.git"
+  },
+  "author": "Jack Ellis",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jackmellis/mono-semantic/issues"
+  },
+  "engines": {
+    "node": ">= 7.4.0"
+  },
+  "homepage": "https://github.com/jackmellis/mono-semantic#readme",
+  "dependencies": {
+    "@semantic-release/commit-analyzer": "^3.0.6",
+    "conventional-changelog": "^1.1.6",
+    "git-head": "^1.20.1",
+    "github": "^11.0.0",
+    "npmlog": "^4.1.2",
+    "parse-github-repo-url": "^1.4.1",
+    "ramda": "^0.25.0",
+    "semantic-release": "^8.2.0",
+    "shelljs": "^0.7.0",
+    "url": "^0.11.0",
+    "version-to-commit": "^1.1.0",
+    "yargs": "^10.0.3"
+  },
+  "devDependencies": {
+    "@team-griffin/eslint-config": "^3.0.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-ramda": "^1.4.3",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "cross-env": "^5.0.5",
+    "eslint": "^4.10.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "flow-bin": "^0.58.0",
+    "husky": "^0.14.3",
+    "inspect-process": "^0.5.0",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "rimraf": "^2.6.2",
+    "sinon": "^4.1.1"
+  }
+}
