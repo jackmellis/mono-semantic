@@ -8,7 +8,7 @@ import { stringify } from '../common/utils';
 
 export type WritePackage = (
   pkg: Package,
-) => void;
+) => Package;
 export default (
   fs: Fs,
 ): WritePackage => (pkg) => {
@@ -22,4 +22,6 @@ export default (
   )(pkg);
 
   fs.writeFileSync(target, data, 'utf8');
+
+  return pkg;
 };

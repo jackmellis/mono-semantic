@@ -1,8 +1,22 @@
 // @flow
 // a package.json file
 export type Package = {
+  // core properties
   name: string,
   version: string,
+  // For some bizare reason flow thinks that dependencies is
+  // at some point merged with publishConfig, release, and repository
+  // so throws a hissy fit when you try to give dependencies
+  // a more concrete definition
+  dependencies: Object,
+  repository: {
+    url: string,
+  },
+  private: boolean,
+  config?: {
+    access?: string,
+  },
+  // semantic-release properties
   publishConfig?: {
     repository: string,
     tag: string,
@@ -14,16 +28,10 @@ export type Package = {
     analyzeCommits: string | Object,
     generateNotes: string | Object,
   },
+  // mono-semantic properties
   scope: string,
   physicalLocation: string,
-  // For some bizare reason flow thinks that dependencies is
-  // at some point merged with publishConfig, release, and repository
-  // so throws a hissy fit when you try to give dependencies
-  // a more concrete definition
-  dependencies: Object,
-  repository: {
-    url: string,
-  },
+  releaseType?: string,
 };
 
 // npm's internal configuration settings
@@ -34,7 +42,11 @@ export type NpmConfig = {
 };
 
 // npm configuration for the current package
-export type Npm = {};
+export type Npm = {
+  registry: string,
+  loglevel: string,
+  tag: string,
+};
 
 // environment variables
 export type Env = {
@@ -56,3 +68,5 @@ export type VersionToCommit = (
   version: string,
   registry: string,
 ) => Promise<string>;
+
+export type GitHead = () => Promise<string>;

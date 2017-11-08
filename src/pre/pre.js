@@ -28,16 +28,9 @@ export default (
   for (let x = 0, l = allPackages.length; x < l; x++) {
     allPackages[x] = await Promise
       .resolve(allPackages[x])
-      .then((pkg) => {
-        return bumpDependencies(allPackages, pkg);
-      })
-      .then((pkg) => {
-        return updateVersion(pkg);
-      })
-      .then((pkg) => {
-        writePackage(pkg);
-        return pkg;
-      });
+      .then((pkg) => bumpDependencies(allPackages, pkg))
+      .then(updateVersion)
+      .then(writePackage);
   }
 
   log.info('pre', 'Finished pre-release');

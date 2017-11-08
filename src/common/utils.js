@@ -11,7 +11,6 @@ export const whileNil = (...conditions: Array<(arg: any) => any>) => (arg: any):
   )(v),
   null, conditions);
 
-
 export function promisify <A>(f: (...args: Array<any>) => void) {
   return (...args: Array<any>): Promise<A> => {
     return new Promise((resolve, reject) => {

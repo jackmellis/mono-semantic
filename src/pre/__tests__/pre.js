@@ -1,12 +1,8 @@
 // @flow
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { rebound, reboundp } from '../../../test-utils';
 import composePre from '../pre';
-
-const rebound = () => sinon.stub().callsFake((x) => x);
-const reboundP = (n = 0) => sinon.stub().callsFake(function () {
-  return arguments[n];
-});
 
 describe('pre / pre', function(){
   beforeEach(function(){
@@ -18,9 +14,9 @@ describe('pre / pre', function(){
     };
     const getPackages = this.getPackages = sinon.stub().returns(allPackages);
     const applyCurrentVersion = this.applyCurrentVersion = rebound();
-    const bumpDependencies = this.bumpDependencies = reboundP(1);
-    const updateVersion = this.updateVersion = reboundP();
-    const writePackage = this.writePackage = sinon.spy();
+    const bumpDependencies = this.bumpDependencies = reboundp(1);
+    const updateVersion = this.updateVersion = reboundp();
+    const writePackage = this.writePackage = rebound();
 
     const pre = this.pre = composePre(
       log,

@@ -1,11 +1,9 @@
 // @flow
-import semRelpre from 'semantic-release/src/pre';
 import composeExternal from '../external';
 import composeCommon from '../common';
-import composePre from './pre';
-import composeApplyCurrentVersion from './applyCurrentVersion';
-import composeBumpDependencies from './bumpDependencies';
-import composeUpdateVersion from './updateVersion';
+import composeUpdateGitHead from './updateGitHead';
+import composePublishPackage from './publishPackage';
+import composePublish from './publish';
 
 export default () => {
   const external = composeExternal();
@@ -27,29 +25,23 @@ export default () => {
     common,
   };
 
-  const applyCurrentVersion = composeApplyCurrentVersion(
-    deps.external.npmlog,
-    deps.common.shell
+  const updateGitHead = composeUpdateGitHead(
+    deps.external.gitHead,
   );
 
-  const bumpDependencies = composeBumpDependencies(
-    deps.external.npmlog
-  );
-
-  const updateVersion = composeUpdateVersion(
+  const publishPackage = composePublishPackage(
     deps.external.npmlog,
-    semRelpre,
+    deps.common.shell,
     deps.common.config.getSemanticReleaseConfig
   );
 
-  const pre = composePre(
+  const publish = composePublish(
     deps.external.npmlog,
     deps.common.getPackages,
-    applyCurrentVersion,
-    bumpDependencies,
-    updateVersion,
+    updateGitHead,
     deps.common.writePackage,
+    publishPackage
   );
 
-  return pre;
+  return publish;
 };
