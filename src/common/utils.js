@@ -1,5 +1,6 @@
 // @flow
 import * as r from 'ramda';
+import type { Package } from '../annotations';
 
 // eslint-disable-next-line max-len
 export const whileNil = (...conditions: Array<(arg: any) => any>) => (arg: any): any => r.reduce(
@@ -34,3 +35,9 @@ export const stringify = (
 export const parse = (
   str: string
 ): any => JSON.parse(str);
+
+export const findPackage = (
+  allPackages: Array<Package>
+) => (
+  name: string
+): ?Package => r.find(r.propEq('name', name), allPackages);

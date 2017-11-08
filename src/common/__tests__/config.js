@@ -269,8 +269,9 @@ describe('common / config ', function() {
       const result = getSemanticReleaseOptions({})(pkg);
 
       expect(result.branch).to.equal('develop');
-      expect(result.debug).to.be.false;
       expect(result.githubToken).to.equal('xxxx');
+
+      expect(result.debug).to.be.true; // not package-specific
     });
     context('when in CI', function() {
       it('sets debug to false', function() {

@@ -25,7 +25,7 @@ describe('plugins / generateNotes / writeChangelog', function(){
           } else {
             this.push(`data ${data}\n`, 'utf8');
           }
-        }, 100);
+        }, 0);
       }
     }
 

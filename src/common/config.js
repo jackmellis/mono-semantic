@@ -102,7 +102,10 @@ export type GetSemanticReleasePlugins = (pkg: Package) => SemanticReleasePlugins
 export const getSemanticReleasePlugins = (
   createPlugins: CreatePlugins
 ): GetSemanticReleasePlugins => (pkg) => {
-  const plugins = r.merge({
+  // $FlowFixMe
+  const packagePlugins: Object = r.propOr({}, 'release', pkg);
+
+  const plugins = {
     analyzeCommits: {
       path: analyzeCommitsPath,
       scope: pkg.scope,
@@ -111,7 +114,8 @@ export const getSemanticReleasePlugins = (
       path: generateNotesPath,
       scope: pkg.scope,
     },
-  }, pkg.release);
+    ...packagePlugins,
+  };
 
   return createPlugins(plugins);
 };
@@ -131,13 +135,28 @@ export const getSemanticReleaseOptions = (
 ): GetSemanticReleaseOptions => (pkg) => {
   // TODO: use userConfig as the primary source for all of these
   // maybe use pipe + merge + pick
-  return r.merge({
-    branch: 'master',
+  return {
+    branch: whileNil(
+      r.path([ 'release', 'branch' ]),
+      r.always('master'),
+    )(pkg),
+    debug: whileNil(
+      r.always(!env.CI),
+    )(pkg),
+    githubToken: whileNil(
+      r.path([ 'release', 'githubToken' ]),
+      r.always(env.GH_TOKEN),
+      r.always(env.GITHUB_TOKEN),
+      r.always(''),
+    )(pkg),
+    githubUrl: whileNil(
+      r.path([ 'release', 'githubUrl' ]),
+      r.always(env.GH_URL),
+      r.always(env.GITHUB_URL),
+      r.always(''),
+    )(pkg),
     fallbackTags: { next: 'latest' },
-    debug: !env.CI,
-    githubToken: env.GH_TOKEN || env.GITHUB_TOKEN || '',
-    githubUrl: env.GH_URL || env.GITHUB_URL || '',
-  }, pkg.release);
+  };
 };
 
 export type SemanticReleaseConfig = {

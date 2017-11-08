@@ -6,6 +6,9 @@ import composeGetPackages, { type GetPackages } from '../getPackages';
 
 describe('common / getPackages', function(){
   beforeEach(function(){
+    const log = {
+      verbose : sinon.spy(),
+    };
     const fs = this.fs = {
       readdirSync: sinon.stub().returns([
         'package-1',
@@ -39,7 +42,7 @@ describe('common / getPackages', function(){
     const userConfig = this.userConfig = {
       pathToPackages: '/path/to/packages',
     };
-    this.getPackages = composeGetPackages(fs, userConfig);
+    this.getPackages = composeGetPackages(fs, userConfig, log);
   });
   it('reads packages from the package path directory', function() {
     const {

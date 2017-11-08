@@ -1,4 +1,10 @@
 {
-  "exclude": ["**/__tests__/*.js"],
-  "reporter": ["html"]
+  "exclude": [
+    "**/__tests__/*.js"
+  ],
+  "include": [
+    "src/**/*.js",
+    "bin/*.js"
+  ],
+  "reporter": ["html", "text"]
 }

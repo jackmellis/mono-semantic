@@ -32,7 +32,11 @@ export default (deps: Dependencies) => {
     shell,
   });
 
-  const getPackages = composeGetPackages(deps.external.fs, deps.userConfig);
+  const getPackages = composeGetPackages(
+    deps.external.fs,
+    deps.userConfig,
+    deps.external.npmlog
+  );
 
   const writePackage = composeWritePackage(deps.external.fs);
 

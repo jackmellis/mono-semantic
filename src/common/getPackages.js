@@ -1,10 +1,11 @@
 // @flow
+import typeof Npmlog from 'npmlog';
 import typeof Fs from 'fs';
 import type { Package, UserConfig } from '../annotations';
 
 import * as r from 'ramda';
 import { join } from 'path';
-import { parse } from '../common/utils';
+import { parse, findPackage } from '../common/utils';
 
 const inList = r.flip(r.contains);
 
@@ -12,6 +13,7 @@ export type GetPackages = () => Array<Package>;
 export default (
   fs: Fs,
   userConfig: UserConfig,
+  log: Npmlog,
 ): GetPackages => () => {
   const packageScopes = fs.readdirSync(userConfig.pathToPackages);
 
@@ -43,8 +45,6 @@ export default (
   )(allPackages);
   const isNotADependency = r.complement(isADependency);
 
-  const findPackage = (name) => r.find(r.propEq('name', name), allPackages);
-
   // Find only packages that are not dependend on first
   const root = r.filter(isNotADependency, allPackages);
 
@@ -54,7 +54,8 @@ export default (
       r.prop('dependencies'),
       r.keys,
       r.filter(inList(packageNames)),
-      r.map(findPackage),
+      r.map(findPackage(allPackages)),
+      r.filter((pkg) => pkg != null),
     )(pkg);
 
     // eslint-disable-next-line no-use-before-define
@@ -76,6 +77,12 @@ export default (
     r.reverse,
     r.uniqBy(r.prop('name')),
   )(root);
+
+  log.verbose(
+    'getPackages',
+    'found %i packages',
+    result.length,
+  );
 
   return result;
 };

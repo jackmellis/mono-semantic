@@ -9,7 +9,7 @@
   "scripts": {
     "precommit": "yarn lint && yarn test",
     "test": "cross-env NODE_ENV=test mocha --reporter dot --require babel-register \"src/**/__tests__/*.js\"",
-    "cover": "nyc yarn test",
+    "cover": "nyc --all yarn test",
     "lint:js": "eslint -c ./.eslintrc.js 'src/**/*.js'",
     "flow": "flow check",
     "lint": "yarn lint:js && yarn flow",

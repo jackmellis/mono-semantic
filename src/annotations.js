@@ -2,18 +2,25 @@
 // a package.json file
 export type Package = {
   name: string,
+  version: string,
   publishConfig?: {
-    repository?: string,
-    tag?: string,
+    repository: string,
+    tag: string,
+  },
+  release?: {
+    branch?: string,
+    githubToken?: string,
+    githubUrl?: string,
+    analyzeCommits: string | Object,
+    generateNotes: string | Object,
   },
   scope: string,
   physicalLocation: string,
-  release: {
-
-  },
-  dependencies: {
-    [moduleName: string]: string,
-  },
+  // For some bizare reason flow thinks that dependencies is
+  // at some point merged with publishConfig, release, and repository
+  // so throws a hissy fit when you try to give dependencies
+  // a more concrete definition
+  dependencies: Object,
   repository: {
     url: string,
   },

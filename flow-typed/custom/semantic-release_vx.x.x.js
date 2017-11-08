@@ -64,7 +64,10 @@ declare module 'semantic-release/src/post' {
 }
 
 declare module 'semantic-release/src/pre' {
-  declare module.exports: any;
+  declare module.exports: (options: Object) => Promise<{
+    version: string,
+    type: string
+  }>;
 }
 
 // Filename aliases
