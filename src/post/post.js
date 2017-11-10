@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import type { GetPackages } from '../common/getPackages';
 import type { WritePackage } from '../common/writePackage';
 import type { GenerateChangelog } from './generateChangelog';
@@ -9,7 +9,7 @@ import type { RestorePackage } from './restorePackage';
 export type Post = () => Promise<void>;
 
 export default (
-  log: Npmlog,
+  log: Log,
   getPackages: GetPackages,
   generateChangelog: GenerateChangelog,
   createGitTags: CreateGitTags,

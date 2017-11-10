@@ -1,6 +1,6 @@
 // @flow
+import type { Fs } from '../../external';
 import typeof ConventionalChangelog from 'conventional-changelog';
-import typeof Fs from 'fs';
 import type { Package } from '../../annotations';
 import type { TransformCommit } from './transformCommit';
 import type { PackageRelease } from '../../commits/getPackageReleases';

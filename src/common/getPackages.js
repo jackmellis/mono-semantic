@@ -1,6 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
-import typeof Fs from 'fs';
+import type { Log, Fs } from '../external';
 import type { Package, UserConfig } from '../annotations';
 
 import * as r from 'ramda';
@@ -13,7 +12,7 @@ export type GetPackages = () => Array<Package>;
 export default (
   fs: Fs,
   userConfig: UserConfig,
-  log: Npmlog,
+  log: Log,
 ): GetPackages => () => {
   const packageScopes = fs.readdirSync(userConfig.pathToPackages);
 

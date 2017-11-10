@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import typeof Pre from 'semantic-release/src/pre';
 import type { GetSemanticReleaseConfig } from '../common/config';
 import type { Package } from '../annotations';
@@ -10,7 +10,7 @@ export type UpdateVersion = (
 ) => Promise<Package>;
 
 export default (
-  log: Npmlog,
+  log: Log,
   pre: Pre,
   getConfig: GetSemanticReleaseConfig
 ): UpdateVersion => async(pkg) => {

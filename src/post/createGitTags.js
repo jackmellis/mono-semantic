@@ -1,6 +1,6 @@
 // @flow
-import typeof Npmlog from 'npmlog';
-import type { Package, GitHead } from '../annotations';
+import type { GitHead, Log } from '../external';
+import type { Package } from '../annotations';
 import type { GetSemanticReleaseConfig } from '../common/config';
 import type { GetGitAgent } from './getGitAgent';
 import type { GetReleaseInfo } from './getReleaseInfo';
@@ -11,7 +11,7 @@ export type CreateGitTags = (
 ) => Promise<Package>;
 
 export default (
-  log: Npmlog,
+  log: Log,
   getGitAgent: GetGitAgent,
   getReleaseInfo: GetReleaseInfo,
   getConfig: GetSemanticReleaseConfig,

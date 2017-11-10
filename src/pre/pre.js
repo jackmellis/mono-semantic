@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import type { GetPackages } from '../common/getPackages';
 import type { WritePackage } from '../common/writePackage';
 import type { ApplyCurrentVersion } from './applyCurrentVersion';
@@ -10,7 +10,7 @@ import * as r from 'ramda';
 export type Pre = () => Promise<void>;
 
 export default (
-  log: Npmlog,
+  log: Log,
   getPackages: GetPackages,
   applyCurrentVersion: ApplyCurrentVersion,
   bumpDependencies: BumpDependencies,

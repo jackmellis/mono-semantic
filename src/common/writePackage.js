@@ -1,5 +1,5 @@
 // @flow
-import typeof Fs from 'fs';
+import type { Fs } from '../external';
 import type { Package } from '../annotations';
 
 import { join } from 'path';

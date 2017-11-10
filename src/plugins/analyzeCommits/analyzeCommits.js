@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../../external';
 import typeof FilterValidCommits from '../../commits/filterValidCommits';
 import typeof CommitAnalyzer from '@semantic-release/commit-analyzer';
 
@@ -13,7 +13,7 @@ export type AnalyzeCommits = (
   done: Function,
 ) => void;
 export default (
-  log: Npmlog,
+  log: Log,
   filterValidCommits: FilterValidCommits,
   analyzer: CommitAnalyzer,
 ): AnalyzeCommits => (pluginConfig = {}, config, done) => {

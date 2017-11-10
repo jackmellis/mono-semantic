@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import type { Shell } from '../common/shell';
 import type { Package } from '../annotations';
 import * as r from 'ramda';
@@ -8,7 +8,7 @@ export type ApplyCurrentVersion = (
   pkg: Package,
 ) => Package;
 export default (
-  log: Npmlog,
+  log: Log,
   shell: Shell,
 ): ApplyCurrentVersion => (pkg) => {
   const cmd = `npm view ${pkg.name} version`;

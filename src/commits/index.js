@@ -1,5 +1,5 @@
 // @flow
-import type { VersionToCommit } from '../annotations';
+import type { VersionToCommit } from '../external';
 import type { Shell } from '../common/shell';
 import type { GetNpmRegistry } from '../common/config';
 

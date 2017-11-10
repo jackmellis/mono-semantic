@@ -64,12 +64,3 @@ export type Env = {
 export type UserConfig = {
   pathToPackages: string,
 };
-
-// Promisified library methods
-export type VersionToCommit = (
-  name: string,
-  version: string,
-  registry: string,
-) => Promise<string>;
-
-export type GitHead = () => Promise<string>;

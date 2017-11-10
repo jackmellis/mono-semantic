@@ -1,8 +1,6 @@
 // @flow
-import type {
-  GitHead,
-  Package,
-} from '../annotations';
+import type { GitHead } from '../external';
+import type { Package } from '../annotations';
 import * as r from 'ramda';
 
 export type UpdateGitHead = (

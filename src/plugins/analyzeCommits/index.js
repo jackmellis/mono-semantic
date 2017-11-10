@@ -1,5 +1,4 @@
 // @flow
-import npmlog from 'npmlog';
 import commitAnalyzer from '@semantic-release/commit-analyzer';
 import composeExternal from '../../external';
 import composeCommon from '../../common';
@@ -33,7 +32,7 @@ export default (userConfig: Object) => {
   };
 
   const analyzeCommits = composeAnalyzeCommits(
-    npmlog,
+    deps.external.npmlog,
     deps.commits.filterValidCommits,
     commitAnalyzer,
   );

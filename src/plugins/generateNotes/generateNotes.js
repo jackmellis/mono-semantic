@@ -1,6 +1,5 @@
 // @flow
-import typeof Fs from 'fs';
-import typeof Npmlog from 'npmlog';
+import type { Log, Fs } from '../../external';
 import type { GetPackageReleases } from '../../commits/getPackageReleases';
 import type { WriteChangelog } from './writeChangelog';
 import type { Package } from '../../annotations';
@@ -17,7 +16,7 @@ export type GenerateNotes = (
   done: (err: Error, result: string) => void,
 ) => Promise<void>;
 export default (
-  log: Npmlog,
+  log: Log,
   fs: Fs,
   getPackageReleases: GetPackageReleases,
   writeChangelog: WriteChangelog,

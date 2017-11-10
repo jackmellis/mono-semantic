@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import type { WritePackage } from '../common/writePackage';
 import type { PublishPackage } from './publishPackage';
 import type { UpdateGitHead } from './updateGitHead';
@@ -8,7 +8,7 @@ import type { GetPackages } from '../common/getPackages';
 export type Publish = () => Promise<void>;
 
 export default (
-  log: Npmlog,
+  log: Log,
   getPackages: GetPackages,
   updateGitHead: UpdateGitHead,
   writePackage: WritePackage,

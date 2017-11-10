@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import type { Package } from '../annotations';
 import * as r from 'ramda';
 import { findPackage } from '../common/utils';
@@ -11,7 +11,7 @@ export type BumpDependencies = (
   pkg: Package,
 ) => Package;
 export default (
-  log: Npmlog,
+  log: Log,
 ): BumpDependencies => (allPackages, pkg) => {
   log.verbose('pre', 'Bumping dependencies for %s', pkg.scope);
 

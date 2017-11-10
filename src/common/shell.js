@@ -1,6 +1,5 @@
 // @flow
-import typeof ShellJs from 'shelljs';
-import typeof Npmlog from 'npmlog';
+import type { Shelljs, Log } from '../external';
 
 export type Shell = (
   cmd: string,
@@ -11,8 +10,8 @@ export type Shell = (
 ) => string;
 
 export default (
-  shelljs: ShellJs,
-  log: Npmlog
+  shelljs: Shelljs,
+  log: Log
 ): Shell => {
   return (cmd, options = {}) => {
     log.verbose('shell', 'exectuting command: %s', cmd);

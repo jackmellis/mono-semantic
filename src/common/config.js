@@ -1,6 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
-import typeof CreatePlugins from 'semantic-release/src/lib/plugins';
+import type { Log, CreatePlugins } from '../external';
 import type { Shell } from './shell';
 import { whileNil } from './utils';
 import type {
@@ -71,7 +70,7 @@ export const getNpmRegistry = (
 
 export type GetNpm = (pkg: Package) => Npm;
 export const getNpm = (
-  log: Npmlog,
+  log: Log,
   npmConfig: NpmConfig,
   getRegistry: GetNpmRegistry,
 ): GetNpm => (pkg) => {
@@ -202,7 +201,7 @@ type Dependencies = {
   external: {
     env: Env,
     createPlugins: CreatePlugins,
-    npmlog: Npmlog,
+    npmlog: Log,
   },
 };
 export default (deps: Dependencies) => {

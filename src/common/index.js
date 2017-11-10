@@ -1,8 +1,5 @@
 // @flow
-import typeof Fs from 'fs';
-import typeof Shelljs from 'shelljs';
-import typeof Npmlog from 'npmlog';
-import typeof CreatePlugins from 'semantic-release/src/lib/plugins';
+import type { Fs, Shelljs, Log, CreatePlugins } from '../external';
 import type { Env } from '../annotations';
 
 import composeShell from './shell';
@@ -15,7 +12,7 @@ type Dependencies = {
   external: {
     fs: Fs,
     shelljs: Shelljs,
-    npmlog: Npmlog,
+    npmlog: Log,
     env: Env,
     createPlugins: CreatePlugins,
   },

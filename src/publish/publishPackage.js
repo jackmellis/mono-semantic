@@ -1,5 +1,5 @@
 // @flow
-import typeof Npmlog from 'npmlog';
+import type { Log } from '../external';
 import type { Package } from '../annotations';
 import type { Shell } from '../common/shell';
 import type { GetSemanticReleaseConfig } from '../common/config';
@@ -10,7 +10,7 @@ export type PublishPackage = (
 ) => Package;
 
 export default (
-  log: Npmlog,
+  log: Log,
   shell: Shell,
   getConfig: GetSemanticReleaseConfig,
 ): PublishPackage => (pkg) => {

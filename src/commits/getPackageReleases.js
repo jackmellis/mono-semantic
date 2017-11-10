@@ -1,5 +1,6 @@
 // @flow
-import type { Package, VersionToCommit } from '../annotations';
+import type { Package } from '../annotations';
+import type { VersionToCommit } from '../external';
 import type { Shell } from '../common/shell';
 import type { GetNpmRegistry } from '../common/config';
 import * as r from 'ramda';
