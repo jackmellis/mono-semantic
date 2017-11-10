@@ -5,11 +5,11 @@ import composeUpdateGitHead from './updateGitHead';
 import composePublishPackage from './publishPackage';
 import composePublish from './publish';
 
-export default () => {
+export default (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {
-    userConfig: {},
+    userConfig,
     external,
   };
 

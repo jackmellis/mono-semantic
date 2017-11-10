@@ -7,11 +7,11 @@ import composeGenerateNotes from './generateNotes';
 import composeTransformCommit from './transformCommit';
 import composeWriteChangelog from './writeChangelog';
 
-export default () => {
+export default (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {
-    userConfig: {},
+    userConfig,
     external,
   };
 

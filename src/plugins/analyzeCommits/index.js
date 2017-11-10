@@ -6,11 +6,11 @@ import composeCommon from '../../common';
 import composeCommits from '../../commits';
 import composeAnalyzeCommits from './analyzeCommits';
 
-export default () => {
+export default (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {
-    userConfig: {},
+    userConfig,
     external,
   };
 

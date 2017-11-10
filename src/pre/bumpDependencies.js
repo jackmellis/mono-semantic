@@ -19,7 +19,8 @@ export default (
 
   // $FlowFixMe - flow doesn't know that we've filtered out nulls
   const childPackages: Array<Package> = r.pipe(
-    r.propOr({}, 'dependencies'),
+    r.prop('dependencies'),
+    r.defaultTo({}),
     r.keys,
     r.filter(inList(packageNames)),
     r.map(findPackage(allPackages)),

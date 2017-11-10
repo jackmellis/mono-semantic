@@ -96,7 +96,9 @@ export const getNpm = (
   return npm;
 };
 
-export type SemanticReleasePlugins = {};
+export type SemanticReleasePlugins = {
+  generateNotes: (config: Object, cb: Function) => void,
+};
 // eslint-disable-next-line max-len
 export type GetSemanticReleasePlugins = (pkg: Package) => SemanticReleasePlugins;
 export const getSemanticReleasePlugins = (
@@ -126,6 +128,7 @@ export type SemanticReleaseOptions = {
   debug: boolean,
   githubToken: string,
   githubUrl: string,
+  githubApiPathPrefix: string,
 };
 // eslint-disable-next-line max-len
 export type GetSemanticReleaseOptions = (pkg: Package) => SemanticReleaseOptions;
@@ -135,6 +138,7 @@ export const getSemanticReleaseOptions = (
 ): GetSemanticReleaseOptions => (pkg) => {
   // TODO: use userConfig as the primary source for all of these
   // maybe use pipe + merge + pick
+  // TODO: throw if githubToken or githubUrl are missing
   return {
     branch: whileNil(
       r.path([ 'release', 'branch' ]),
@@ -153,6 +157,12 @@ export const getSemanticReleaseOptions = (
       r.path([ 'release', 'githubUrl' ]),
       r.always(env.GH_URL),
       r.always(env.GITHUB_URL),
+      r.always(''),
+    )(pkg),
+    githubApiPathPrefix: whileNil(
+      r.path([ 'release', 'githubApiPathPrefix' ]),
+      r.always(env.GH_API_PATH_PREFIX),
+      r.always(env.GITHUB_API_PATH_PREFIX),
       r.always(''),
     )(pkg),
     fallbackTags: { next: 'latest' },

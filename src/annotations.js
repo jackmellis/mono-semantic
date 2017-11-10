@@ -32,6 +32,7 @@ export type Package = {
   scope: string,
   physicalLocation: string,
   releaseType?: string,
+  changelog?: string,
 };
 
 // npm's internal configuration settings
@@ -55,6 +56,8 @@ export type Env = {
   GITHUB_TOKEN: ?string,
   GH_URL: ?string,
   GITHUB_URL: ?string,
+  GH_API_PATH_PREFIX: ?string,
+  GITHUB_API_PATH_PREFIX: ?string,
 };
 
 // options passed into the cli

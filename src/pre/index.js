@@ -7,11 +7,11 @@ import composeApplyCurrentVersion from './applyCurrentVersion';
 import composeBumpDependencies from './bumpDependencies';
 import composeUpdateVersion from './updateVersion';
 
-export default () => {
+export default (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {
-    userConfig: {},
+    userConfig,
     external,
   };
 
