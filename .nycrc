@@ -1,6 +1,7 @@
 {
   "exclude": [
-    "**/__tests__/*.js"
+    "**/__tests__/*.js",
+    "flow-typed/**/*.*"
   ],
   "include": [
     "src/**/*.js",

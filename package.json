@@ -8,8 +8,8 @@
   },
   "scripts": {
     "precommit": "yarn lint && yarn flow && yarn test",
-    "test": "cross-env NODE_ENV=test mocha --reporter dot --require babel-register \"src/**/__tests__/*.js\"",
-    "cover": "nyc --all yarn test",
+    "test": "cross-env NODE_ENV=test mocha --require babel-register \"src/**/__tests__/*.js\"",
+    "cover": "cross-env NODE_ENV=test nyc --require babel-register --all mocha --reporter dot \"src/**/__tests__/*.js\"",
     "lint": "eslint -c ./.eslintrc.js 'src/**/*.js'",
     "flow": "flow check",
     "build": "rimraf lib && babel src -d dist --source-maps --ignore __tests__",

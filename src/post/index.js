@@ -61,7 +61,7 @@ export default (userConfig: Object) => {
 
   const post = composePost(
     deps.external.npmlog,
-    deps.comon.getPackages,
+    deps.common.getPackages,
     generateChangelog,
     createGitTags,
     restorePackage,
