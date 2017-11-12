@@ -16,29 +16,37 @@ export default (
   restorePackage: RestorePackage,
   writePackage: WritePackage,
 ): Post => async() => {
-  log.info('post', 'Starting post-release');
+  try {
+    log.info('post', 'Starting post-release');
 
-  const allPackages = getPackages();
+    const allPackages = getPackages();
 
-  // eslint-disable-next-line no-plusplus
-  for (let x = 0, l = allPackages.length; x < l; x++) {
-    const pkg = allPackages[x];
-    let promise = Promise.resolve(pkg);
+    // eslint-disable-next-line no-plusplus
+    for (let x = 0, l = allPackages.length; x < l; x++) {
+      const pkg = allPackages[x];
+      let promise = Promise.resolve(pkg);
 
-    if (pkg.releaseType) {
+      if (pkg.releaseType) {
+        promise = promise
+          .then(generateChangelog)
+          .then(createGitTags);
+      } else {
+        log.info(
+          'post',
+          'Skipping post-release of %s - package not relased',
+          pkg.scope
+        );
+      }
+
       promise = promise
-        .then(generateChangelog)
-        .then(createGitTags);
-    } else {
-      log.info('post', 'Skipping post-release of %s - package not relased');
+        .then((pkg) => restorePackage(allPackages, pkg))
+        .then(writePackage);
+
+      await promise;
     }
 
-    promise = promise
-      .then((pkg) => restorePackage(allPackages, pkg))
-      .then(writePackage);
-
-    await promise;
+    log.info('post', 'Finished post-release');
+  } catch (e){
+    log.error('post', '%s\n%j', e.message, e);
   }
-
-  log.info('post', 'Finished post-release');
 };

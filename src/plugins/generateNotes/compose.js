@@ -17,9 +17,6 @@ export default () => {
 
   const common = composeCommon(deps);
   deps.userConfig = common.config.getUserConfig();
-  if (common.config.npmConfig.loglevel) {
-    deps.external.npmlog.level = common.config.npmConfig.loglevel;
-  }
 
   deps = {
     ...deps,

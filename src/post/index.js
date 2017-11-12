@@ -20,10 +20,6 @@ module.exports = (userConfig: Object) => {
 
   const common = composeCommon(deps);
 
-  if (common.config.npmConfig.loglevel) {
-    deps.external.npmlog.level = common.config.npmConfig.loglevel;
-  }
-
   deps = {
     ...deps,
     userConfig: common.config.getUserConfig(),
@@ -55,10 +51,13 @@ module.exports = (userConfig: Object) => {
   );
 
   const generateChangelog = composeGenerateChangelog(
+    deps.external.npmlog,
     deps.common.config.getSemanticReleaseConfig
   );
 
-  const restorePackage = composeRestorePackage();
+  const restorePackage = composeRestorePackage(
+    deps.external.npmlog,
+  );
 
   const post = composePost(
     deps.external.npmlog,

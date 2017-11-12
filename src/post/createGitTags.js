@@ -34,6 +34,18 @@ export default (
     sha,
   };
 
+  log.verbose(
+    'post',
+    'Creating git tag: %j',
+    tag,
+  );
+
+  log.verbose(
+    'post',
+    'Creating release: %j',
+    release,
+  );
+
   if (config.options.debug) {
     log.info('post', `Creating draft release ${name}`);
   } else {

@@ -3,7 +3,10 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import composeRestorePackage from '../restorePackage';
 
-const restorePackage = composeRestorePackage();
+const restorePackage = composeRestorePackage({
+  info: sinon.spy(),
+  verbose: sinon.spy(),
+});
 
 describe('post / restorePackage', function(){
   beforeEach(function(){

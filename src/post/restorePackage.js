@@ -1,5 +1,6 @@
 // @flow
 import type { Package } from '../annotations';
+import type { Log } from '../external';
 import * as r from 'ramda';
 import { findPackage } from '../common/utils';
 
@@ -10,7 +11,18 @@ export type RestorePackage = (
   pkg: Package,
 ) => Package;
 
-export default (): RestorePackage => (allPackages, pkg) => {
+export default (
+  log: Log,
+): RestorePackage => (allPackages, pkg) => {
+  if (!pkg.releaseType) {
+    return pkg;
+  }
+
+  log.info('post', 'Restoring package %s', pkg.scope);
+  log.verbose('post', 'Removing releaseType');
+  log.verbose('post', 'Removing gitHead');
+  log.verbose('post', 'Removing changelog');
+
   const names = r.map(r.prop('name'), allPackages);
 
   const deps = r.pipe(
@@ -32,6 +44,14 @@ export default (): RestorePackage => (allPackages, pkg) => {
     )),
     r.fromPairs,
   )(deps);
+
+  if (deps.length) {
+    log.verbose(
+      'post',
+      'Restoring dependencies: %j',
+      r.map(r.prop('name'), deps),
+    );
+  }
 
   // $FlowFixMe
   const restored: Package = r.pipe(

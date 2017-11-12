@@ -12,6 +12,7 @@ describe('post / createGitTags', function(){
     };
     const log = this.log = {
       info: sinon.spy(),
+      verbose: sinon.spy(),
     };
     const agent = this.agent = {
       gitdata: {

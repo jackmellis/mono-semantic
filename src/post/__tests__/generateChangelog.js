@@ -6,6 +6,10 @@ import composeGenerateChangelog from '../generateChangelog';
 describe('post / generateChangelog', function(){
 beforeEach(function(){
   const pkg = this.pkg = {};
+  const log = {
+    info: sinon.spy(),
+    verbose: sinon.spy(),
+  };
   const config = this.config = {
     plugins: {
       generateNotes: sinon.stub().callsFake((c, cb) => {
@@ -17,7 +21,7 @@ beforeEach(function(){
   };
   const getConfig = this.getConfig = sinon.stub().returns(config);
 
-  this.generateChangelog = composeGenerateChangelog(getConfig);
+  this.generateChangelog = composeGenerateChangelog(log, getConfig);
 });
 
 

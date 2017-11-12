@@ -218,6 +218,11 @@ export default (deps: Dependencies) => {
   result.getUserConfig = getUserConfig(deps.userConfig);
   const userConfig = result.getUserConfig();
   const npmConfig = result.npmConfig = getNpmConfig(deps.shell)();
+  if (npmConfig.loglevel) {
+    // We're composing stuff here so it doesn't really matter,
+    // but just keep in mind we are mutating the arguments
+    deps.external.npmlog.level = npmConfig.loglevel;
+  }
   result.getNpmRegistry = getNpmRegistry(userConfig, result.npmConfig);
   result.getNpm = getNpm(
     deps.external.npmlog,
