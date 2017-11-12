@@ -29,9 +29,11 @@ export default (deps: Dependencies) => {
     shell,
   });
 
+  const userConfig = config.getUserConfig();
+
   const getPackages = composeGetPackages(
     deps.external.fs,
-    deps.userConfig,
+    userConfig,
     deps.external.npmlog
   );
 

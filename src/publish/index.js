@@ -5,7 +5,8 @@ import composeUpdateGitHead from './updateGitHead';
 import composePublishPackage from './publishPackage';
 import composePublish from './publish';
 
-export default (userConfig: Object) => {
+// eslint-disable-next-line import/no-commonjs
+module.exports = (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {

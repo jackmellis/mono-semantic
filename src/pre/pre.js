@@ -17,21 +17,26 @@ export default (
   updateVersion: UpdateVersion,
   writePackage: WritePackage,
 ): Pre => async() => {
-  log.info('pre', 'Starting pre-release');
+  try {
+    log.info('pre', 'Starting pre-release');
 
-  const allPackages = r.pipe(
-    getPackages,
-    r.map(applyCurrentVersion),
-  )(null);
+    const allPackages = r.pipe(
+      getPackages,
+      r.map(applyCurrentVersion),
+    )(null);
 
-  // eslint-disable-next-line no-plusplus
-  for (let x = 0, l = allPackages.length; x < l; x++) {
-    allPackages[x] = await Promise
-      .resolve(allPackages[x])
-      .then((pkg) => bumpDependencies(allPackages, pkg))
-      .then(updateVersion)
-      .then(writePackage);
+    // eslint-disable-next-line no-plusplus
+    for (let x = 0, l = allPackages.length; x < l; x++) {
+      allPackages[x] = await Promise
+        .resolve(allPackages[x])
+        .then((pkg) => bumpDependencies(allPackages, pkg))
+        .then(updateVersion)
+        .then(writePackage);
+    }
+
+    log.info('pre', 'Finished pre-release');
+  } catch (e){
+    log.error('pre', '%s\n%j', e.message, e);
+    process.exit(1);
   }
-
-  log.info('pre', 'Finished pre-release');
 };

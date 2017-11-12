@@ -7,7 +7,8 @@ import composeApplyCurrentVersion from './applyCurrentVersion';
 import composeBumpDependencies from './bumpDependencies';
 import composeUpdateVersion from './updateVersion';
 
-export default (userConfig: Object) => {
+// eslint-disable-next-line import/no-commonjs
+module.exports = (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {

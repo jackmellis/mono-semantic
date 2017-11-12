@@ -25,6 +25,8 @@ export type Package = {
     branch?: string,
     githubToken?: string,
     githubUrl?: string,
+    tag?: string,
+    registry?: string,
     analyzeCommits: string | Object,
     generateNotes: string | Object,
   },
@@ -63,4 +65,11 @@ export type Env = {
 // options passed into the cli
 export type UserConfig = {
   pathToPackages: string,
+  registry: ?string,
+  loglevel: ?string,
+  branch: ?string,
+  debug: ?boolean,
+  githubToken: ?string,
+  githubUrl: ?string,
+  githubApiPathPrefix: ?string,
 };

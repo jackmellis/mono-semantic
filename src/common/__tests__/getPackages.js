@@ -8,6 +8,7 @@ describe('common / getPackages', function(){
   beforeEach(function(){
     const log = {
       verbose : sinon.spy(),
+      info: sinon.spy(),
     };
     const fs = this.fs = {
       readdirSync: sinon.stub().returns([

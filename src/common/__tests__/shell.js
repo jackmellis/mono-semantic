@@ -6,7 +6,10 @@ import composeShell from '../shell';
 describe('shell', function() {
   beforeEach(function(){
     this.shelljs = {
-      exec: sinon.stub().returns('stdout'),
+      exec: sinon.stub().returns({
+        code: 0,
+        stdout: 'stdout',
+      }),
     };
     this.log = {
       verbose: sinon.spy(),

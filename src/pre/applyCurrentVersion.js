@@ -24,7 +24,7 @@ export default (
     r.ifElse(
       r.pipe(
         r.pathOr('', [ 'message' ]),
-        r.contains('E404'),
+        r.contains('404'),
       ),
       r.pipe(
         r.tap(() => log.info(

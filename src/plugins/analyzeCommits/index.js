@@ -1,4 +1,3 @@
 // @flow
-import compose from './compose';
-
-export default compose();
+// eslint-disable-next-line import/no-commonjs
+module.exports = require('./compose').default();

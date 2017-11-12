@@ -38,13 +38,14 @@ export const getNpmConfig = (
   return JSON.parse(configStr);
 };
 
-// TODO: use userConfig as the first possible source for this
-// TODO: fall back to pkg.release.registry
 export type GetNpmRegistry = (pkg: Package) => string;
 export const getNpmRegistry = (
+  userConfig: UserConfig,
   npmConfig: NpmConfig
 ): GetNpmRegistry => (pkg) => {
   return whileNil(
+    r.always(userConfig.registry),
+    r.path([ 'release', 'registry' ]),
     r.path([ 'publishConfig', 'registry' ]),
     r.ifElse(
       r.pipe(
@@ -72,13 +73,17 @@ export type GetNpm = (pkg: Package) => Npm;
 export const getNpm = (
   log: Log,
   npmConfig: NpmConfig,
+  userConfig: UserConfig,
   getRegistry: GetNpmRegistry,
 ): GetNpm => (pkg) => {
   const registry = getRegistry(pkg);
-  // TODO: use userConfig as the first source for these
-  const loglevel = r.propOr('warn', 'loglevel', npmConfig);
+  const loglevel = whileNil(
+    r.always(userConfig.loglevel),
+    r.always(npmConfig.loglevel),
+    r.always('warn'),
+  )(null);
   const tag: string = whileNil(
-    // TODO: fall back to pkg.release.tag
+    r.path([ 'release', 'tag' ]),
     r.path([ 'publishConfig', 'tag' ]),
     r.always(r.prop('tag', npmConfig)),
     r.always('latest'),
@@ -134,31 +139,35 @@ export type GetSemanticReleaseOptions = (pkg: Package) => SemanticReleaseOptions
 // eslint-disable-next-line max-len
 export const getSemanticReleaseOptions = (
   env: Env,
+  userConfig: UserConfig,
 ): GetSemanticReleaseOptions => (pkg) => {
-  // TODO: use userConfig as the primary source for all of these
-  // maybe use pipe + merge + pick
   // TODO: throw if githubToken or githubUrl are missing
   return {
     branch: whileNil(
+      r.always(userConfig.branch),
       r.path([ 'release', 'branch' ]),
       r.always('master'),
     )(pkg),
     debug: whileNil(
+      r.always(userConfig.debug),
       r.always(!env.CI),
     )(pkg),
     githubToken: whileNil(
+      r.always(userConfig.githubToken),
       r.path([ 'release', 'githubToken' ]),
       r.always(env.GH_TOKEN),
       r.always(env.GITHUB_TOKEN),
       r.always(''),
     )(pkg),
     githubUrl: whileNil(
+      r.always(userConfig.githubUrl),
       r.path([ 'release', 'githubUrl' ]),
       r.always(env.GH_URL),
       r.always(env.GITHUB_URL),
       r.always(''),
     )(pkg),
     githubApiPathPrefix: whileNil(
+      r.always(userConfig.githubApiPathPrefix),
       r.path([ 'release', 'githubApiPathPrefix' ]),
       r.always(env.GH_API_PATH_PREFIX),
       r.always(env.GITHUB_API_PATH_PREFIX),
@@ -207,11 +216,13 @@ type Dependencies = {
 export default (deps: Dependencies) => {
   const result = {};
   result.getUserConfig = getUserConfig(deps.userConfig);
+  const userConfig = result.getUserConfig();
   const npmConfig = result.npmConfig = getNpmConfig(deps.shell)();
-  result.getNpmRegistry = getNpmRegistry(result.npmConfig);
+  result.getNpmRegistry = getNpmRegistry(userConfig, result.npmConfig);
   result.getNpm = getNpm(
     deps.external.npmlog,
     npmConfig,
+    userConfig,
     result.getNpmRegistry
   );
   result.getSemanticReleasePlugins = getSemanticReleasePlugins(
@@ -219,6 +230,7 @@ export default (deps: Dependencies) => {
   );
   result.getSemanticReleaseOptions = getSemanticReleaseOptions(
     deps.external.env,
+    userConfig,
   );
   result.getSemanticReleaseConfig = getSemanticReleaseConfig(
     result.getNpm,

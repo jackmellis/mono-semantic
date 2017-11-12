@@ -77,7 +77,7 @@ export default (
     r.uniqBy(r.prop('name')),
   )(root);
 
-  log.verbose(
+  log.info(
     'getPackages',
     'found %i packages',
     result.length,

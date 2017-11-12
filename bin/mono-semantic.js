@@ -50,6 +50,6 @@ default:
   throw new Error(`Unknown process: ${mode}`);
 }
 
-const process = require(`../dist/${mode}`);
+const process = require(`../dist/${mode}`)(options);
 
 process(options);

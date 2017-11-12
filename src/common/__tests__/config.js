@@ -61,13 +61,21 @@ describe('common / config ', function() {
         '@my-scope:registry': 'scope-registry',
         'registry': 'config-registry',
       };
-      this.getNpmRegistry = getNpmRegistry(this.npmconfig);
+      this.userConfig = {};
+      this.getNpmRegistry = getNpmRegistry(this.userConfig, this.npmconfig);
       this.pkg = {
         name: '@my-scope/my-package',
         publishConfig: {
           registry: 'package-registry',
         },
       };
+    });
+    it('returns the user config registry', function () {
+      const { userConfig, pkg, getNpmRegistry } = this;
+      userConfig.registry = 'user-registry';
+      const result =  getNpmRegistry(pkg);
+
+      expect(result).to.equal('user-registry');
     });
     it('returns the package.json registry', function(){
       const {
@@ -76,6 +84,16 @@ describe('common / config ', function() {
       const result = getNpmRegistry(pkg);
 
       expect(result).to.equal(pkg.publishConfig.registry);
+    });
+    it('returns the package.json release registry', function () {
+      const {
+        getNpmRegistry, pkg,
+      } = this;
+      pkg.release = {};
+      pkg.release.registry = 'release-registry';
+      const result = getNpmRegistry(pkg);
+
+      expect(result).to.equal(pkg.release.registry);
     });
     it('returns the registry from the global npm config', function() {
       const {
@@ -131,9 +149,11 @@ describe('common / config ', function() {
           tag: 'next',
         },
       };
+      this.userConfig = {};
       this.getNpm = getNpm(
         this.npmlog,
         this.npmconfig,
+        this.userConfig,
         this.getRegistry,
       );
     });
@@ -153,6 +173,17 @@ describe('common / config ', function() {
       expect(registry).to.equal('my-registry');
     });
     describe('loglevel', function() {
+      it('is fetched from the user config', function () {
+        const {
+          getNpm,
+          userConfig,
+          pkg,
+        } = this;
+        userConfig.loglevel = 'error';
+        const { loglevel } = getNpm(pkg);
+
+        expect(loglevel).to.equal(userConfig.loglevel);
+      });
       it('is fetched from the npm config', function() {
         const {
           getNpm, npmconfig, pkg,
@@ -249,7 +280,8 @@ describe('common / config ', function() {
         GH_TOKEN: 'github-token',
         GH_URL: 'github-url',
       };
-      const fn = getSemanticReleaseOptions(env);
+      const userConfig = {};
+      const fn = getSemanticReleaseOptions(env, userConfig);
       const pkg = {};
       const result = fn(pkg);
 
@@ -266,7 +298,7 @@ describe('common / config ', function() {
           githubToken: 'xxxx',
         },
       };
-      const result = getSemanticReleaseOptions({})(pkg);
+      const result = getSemanticReleaseOptions({}, {})(pkg);
 
       expect(result.branch).to.equal('develop');
       expect(result.githubToken).to.equal('xxxx');
@@ -278,7 +310,7 @@ describe('common / config ', function() {
         const env = {
           CI: true,
         };
-        const result = getSemanticReleaseOptions(env)({});
+        const result = getSemanticReleaseOptions(env, {})({});
 
         expect(result.debug).to.be.false;
       });
@@ -288,7 +320,7 @@ describe('common / config ', function() {
         const env = {
           CI: false,
         };
-        const result = getSemanticReleaseOptions(env)({});
+        const result = getSemanticReleaseOptions(env, {})({});
 
         expect(result.debug).to.be.true;
       });

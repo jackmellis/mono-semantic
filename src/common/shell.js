@@ -16,6 +16,11 @@ export default (
   return (cmd, options = {}) => {
     log.verbose('shell', 'exectuting command: %s', cmd);
 
-    return shelljs.exec(cmd, options);
+    const result = shelljs.exec(cmd, options);
+
+    if (result.code === 0) {
+      return result.stdout;
+    }
+    throw new Error(result.stderr);
   };
 };

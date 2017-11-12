@@ -14,17 +14,21 @@ export default (
   writePackage: WritePackage,
   publishPackage: PublishPackage,
 ): Publish => async() => {
-  log.info('publish', 'Starting publish');
+  try {
+    log.info('publish', 'Starting publish');
 
-  const allPackages = getPackages();
+    const allPackages = getPackages();
 
-  // eslint-disable-next-line no-plusplus
-  for (let x = 0, l = allPackages.length; x < l; x++) {
-    await Promise.resolve(allPackages[x])
-      .then(updateGitHead)
-      .then(writePackage)
-      .then(publishPackage);
+    // eslint-disable-next-line no-plusplus
+    for (let x = 0, l = allPackages.length; x < l; x++) {
+      await Promise.resolve(allPackages[x])
+        .then(updateGitHead)
+        .then(writePackage)
+        .then(publishPackage);
+    }
+
+    log.info('publish', 'Finished publish');
+  } catch (e){
+    log.error('publish', '%s\n%j', e.message, e);
   }
-
-  log.info('publish', 'Finished publish');
 };

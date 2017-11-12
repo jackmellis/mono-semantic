@@ -9,7 +9,8 @@ import composeGenerateChangelog from './generateChangelog';
 import composeRestorePackage from './restorePackage';
 import composePost from './post';
 
-export default (userConfig: Object) => {
+// eslint-disable-next-line import/no-commonjs
+module.exports = (userConfig: Object) => {
   const external = composeExternal();
 
   let deps = {

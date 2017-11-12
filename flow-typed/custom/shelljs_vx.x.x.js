@@ -27,6 +27,10 @@ declare module 'shelljs' {
     ) => void) & (
       cmd: string,
       options: Object,
-    ) => string
+    ) => {
+      code: number,
+      stderr: string,
+      stdout: string,
+    }
   }
 }

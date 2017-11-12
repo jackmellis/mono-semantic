@@ -9,7 +9,7 @@
   "scripts": {
     "precommit": "yarn lint && yarn flow && yarn test",
     "test": "cross-env NODE_ENV=test mocha --require babel-register \"src/**/__tests__/*.js\"",
-    "cover": "cross-env NODE_ENV=test nyc --require babel-register --all mocha --reporter dot \"src/**/__tests__/*.js\"",
+    "cover": "cross-env NODE_ENV=test nyc --all yarn test",
     "lint": "eslint -c ./.eslintrc.js 'src/**/*.js'",
     "flow": "flow check",
     "build": "rimraf lib && babel src -d dist --source-maps --ignore __tests__",
