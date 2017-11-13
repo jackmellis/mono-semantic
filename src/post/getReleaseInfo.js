@@ -1,5 +1,5 @@
 // @flow
-import type { GetSemanticReleaseConfig } from '../common/config';
+import type { GetSemanticReleaseConfig } from '../common/config/config';
 import type { Package } from '../annotations';
 import { getPackageSlug, getReleaseTagName } from './utils';
 

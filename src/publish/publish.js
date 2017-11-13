@@ -29,6 +29,8 @@ export default (
 
     log.info('publish', 'Finished publish');
   } catch (e){
-    log.error('publish', '%s\n%j', e.message, e);
+    log.error('pre', e.message);
+    log.info('pre', e);
+    process.exit(1);
   }
 };

@@ -4,7 +4,7 @@ import type { Log } from '../external';
 import type {
   GetSemanticReleaseConfig,
   SemanticReleaseConfig,
-} from '../common/config';
+} from '../common/config/config';
 import * as r from 'ramda';
 import { promisify } from '../common/utils';
 

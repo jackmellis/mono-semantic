@@ -1,7 +1,7 @@
 // @flow
 import type { Log } from '../external';
 import typeof Pre from 'semantic-release/src/pre';
-import type { GetSemanticReleaseConfig } from '../common/config';
+import type { GetSemanticReleaseConfig } from '../common/config/config';
 import type { Package } from '../annotations';
 import * as r from 'ramda';
 

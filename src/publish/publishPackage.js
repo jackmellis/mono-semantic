@@ -2,7 +2,7 @@
 import type { Log } from '../external';
 import type { Package } from '../annotations';
 import type { Shell } from '../common/shell';
-import type { GetSemanticReleaseConfig } from '../common/config';
+import type { GetSemanticReleaseConfig } from '../common/config/config';
 import * as r from 'ramda';
 
 export type PublishPackage = (

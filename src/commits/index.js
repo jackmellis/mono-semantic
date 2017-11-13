@@ -1,7 +1,7 @@
 // @flow
 import type { VersionToCommit } from '../external';
 import type { Shell } from '../common/shell';
-import type { GetNpmRegistry } from '../common/config';
+import type { GetNpmRegistry } from '../common/config/config';
 
 import isValidCommit from './isValidCommit';
 import filterValidCommits from './filterValidCommits';

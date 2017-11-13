@@ -1,7 +1,7 @@
 // @flow
 import type { GitHead, Log } from '../external';
 import type { Package } from '../annotations';
-import type { GetSemanticReleaseConfig } from '../common/config';
+import type { GetSemanticReleaseConfig } from '../common/config/config';
 import type { GetGitAgent } from './getGitAgent';
 import type { GetReleaseInfo } from './getReleaseInfo';
 import { getPackageSlug, getReleaseTagName } from './utils';

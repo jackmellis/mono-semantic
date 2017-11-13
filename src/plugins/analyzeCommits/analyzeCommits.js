@@ -29,5 +29,5 @@ export default (
     scope
   );
 
-  analyzer(pluginConfig, config, done);
+  analyzer(pluginConfig, newConfig, done);
 };

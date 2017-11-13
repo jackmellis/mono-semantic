@@ -1,7 +1,7 @@
 // @flow
 import Github from 'github';
 import type { Package } from '../annotations';
-import type { GetSemanticReleaseConfig } from '../common/config';
+import type { GetSemanticReleaseConfig } from '../common/config/config';
 import * as r from 'ramda';
 import url from 'url';
 

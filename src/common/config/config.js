@@ -1,14 +1,14 @@
 // @flow
-import type { Log, CreatePlugins } from '../external';
-import type { Shell } from './shell';
-import { whileNil } from './utils';
+import type { Log, CreatePlugins } from '../../external';
+import type { Shell } from '../shell';
+import { whileNil } from '../utils';
 import type {
   Package,
   NpmConfig,
   Npm,
   Env,
   UserConfig,
-} from '../annotations';
+} from '../../annotations';
 
 import * as r from 'ramda';
 import { join, resolve } from 'path';
@@ -222,47 +222,4 @@ export const getSemanticReleaseConfig = (
     env,
     pkg,
   };
-};
-
-type Dependencies = {
-  userConfig: Object,
-  shell: Shell,
-  external: {
-    env: Env,
-    createPlugins: CreatePlugins,
-    npmlog: Log,
-  },
-};
-export default (deps: Dependencies) => {
-  const result = {};
-  result.getUserConfig = getUserConfig(deps.userConfig);
-  const userConfig = result.getUserConfig();
-  const npmConfig = result.npmConfig = getNpmConfig(deps.shell)();
-  if (npmConfig.loglevel) {
-    // We're composing stuff here so it doesn't really matter,
-    // but just keep in mind we are mutating the arguments
-    deps.external.npmlog.level = npmConfig.loglevel;
-  }
-  result.getNpmRegistry = getNpmRegistry(userConfig, result.npmConfig);
-  result.getNpm = getNpm(
-    deps.external.npmlog,
-    npmConfig,
-    userConfig,
-    result.getNpmRegistry
-  );
-  result.getSemanticReleasePlugins = getSemanticReleasePlugins(
-    deps.external.createPlugins
-  );
-  result.getSemanticReleaseOptions = getSemanticReleaseOptions(
-    deps.external.env,
-    userConfig,
-  );
-  result.getSemanticReleaseConfig = getSemanticReleaseConfig(
-    result.getNpm,
-    result.getSemanticReleasePlugins,
-    result.getSemanticReleaseOptions,
-    deps.external.env,
-  );
-
-  return result;
 };

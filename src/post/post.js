@@ -47,6 +47,8 @@ export default (
 
     log.info('post', 'Finished post-release');
   } catch (e){
-    log.error('post', '%s\n%j', e.message, e);
+    log.error('pre', e.message);
+    log.info('pre', e);
+    process.exit(1);
   }
 };

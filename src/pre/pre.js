@@ -36,7 +36,8 @@ export default (
 
     log.info('pre', 'Finished pre-release');
   } catch (e){
-    log.error('pre', '%s\n%j', e.message, e);
+    log.error('pre', e.message);
+    log.info('pre', e);
     process.exit(1);
   }
 };

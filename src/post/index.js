@@ -26,6 +26,13 @@ module.exports = (userConfig: Object) => {
     common,
   };
 
+  if (deps.userConfig.loglevel) {
+    deps.external.npmlog.level = userConfig.loglevel;
+    // $FlowFixMe
+  } else if (deps.common.config.npmConfig.loglevel) {
+    deps.external.npmlog.level = deps.common.config.npmConfig.loglevel;
+  }
+
   const commits = composeCommits(deps);
 
   deps = {
