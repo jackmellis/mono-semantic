@@ -54,7 +54,6 @@ describe('post / createGitTags', function(){
       const result = await createGitTags(pkg);
 
       expect(shell.called).to.be.true;
-      console.log(shell.lastCall.args[0])
       expect(shell.calledWith('git tag -a my-package@1.2.3 my-sha -m "my-package@1.2.3"')).to.be.true;
     });
   });

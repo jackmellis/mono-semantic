@@ -50,7 +50,8 @@ export default (
 
   const tag = options.npm.tag;
 
-  const cmd = `npm publish ${access} --tag ${tag} ${target}`;
+  // const cmd = `npm publish ${access} --tag ${tag} ${target}`;
+  const cmd = `yarn publish ${access} --tag ${tag} ${target}`;
 
   if (options.options.debug) {
     log.verbose('publish', cmd);

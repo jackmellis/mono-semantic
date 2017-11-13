@@ -44,7 +44,7 @@ describe('publish / publishPackage', function(){
   });
   it('runs a publish command', function () {
     const { pkg, publishPackage, shell } = this;
-    const expected = 'npm publish  --tag latest /path/to/package';
+    const expected = 'yarn publish  --tag latest /path/to/package';
 
     publishPackage(pkg);
 
@@ -54,7 +54,7 @@ describe('publish / publishPackage', function(){
   context('when package is scoped', function () {
     it('adds a public access flag', function () {
       const { pkg, publishPackage, shell } = this;
-      const expected = 'npm publish --access=public --tag latest /path/to/package';
+      const expected = 'yarn publish --access=public --tag latest /path/to/package';
       pkg.name = '@scope/package1';
       pkg.config = {
         access: 'public',
@@ -67,7 +67,7 @@ describe('publish / publishPackage', function(){
     });
     it('does not add an access flag if package is private', function () {
       const { pkg, publishPackage, shell } = this;
-      const expected = 'npm publish  --tag latest /path/to/package';
+      const expected = 'yarn publish  --tag latest /path/to/package';
       pkg.name = '@scope/package1';
       pkg.config = null;
 
@@ -79,7 +79,7 @@ describe('publish / publishPackage', function(){
   });
   it('adds the config tag to the command', function () {
     const { pkg, publishPackage, config, shell } = this;
-    const expected = 'npm publish  --tag next /path/to/package';
+    const expected = 'yarn publish  --tag next /path/to/package';
     config.npm.tag = 'next';
 
     publishPackage(pkg);

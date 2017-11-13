@@ -11,7 +11,8 @@ export default (
   log: Log,
   shell: Shell,
 ): ApplyCurrentVersion => (pkg) => {
-  const cmd = `npm view ${pkg.name} version`;
+  // const cmd = `npm view ${pkg.name} version`;
+  const cmd = `yarn info ${pkg.name} version`;
 
   log.verbose('pre', 'fetching current version of %s', pkg.scope);
 

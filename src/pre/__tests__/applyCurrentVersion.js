@@ -30,7 +30,7 @@ describe('pre / applyCurrentVersion', function(){
     expect(shell.called).to.be.true;
     const cmd = shell.lastCall.args[0];
 
-    expect(cmd).to.equal('npm view @my-scope/package1 version');
+    expect(cmd).to.equal('yarn info @my-scope/package1 version');
   });
 
   it('updates the version of the package', function(){

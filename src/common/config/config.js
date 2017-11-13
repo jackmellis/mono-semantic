@@ -39,12 +39,26 @@ export const getNpmConfig = (
   shell: Shell,
 ): GetNpmConfig => () => {
   const configStr = shell(
-    'npm config ls --json',
+    // 'npm config ls --json',
+    'yarn config list --json',
     {
       silent: true,
     },
   );
-  return JSON.parse(configStr);
+  // yarn returns some awkward details
+  // that we need to parse
+  // $FlowFixMe
+  return r.pipe(
+    r.replace(/\r/g, ''),
+    r.split('\n'),
+    r.filter((line) => Boolean(line)),
+    r.map((line): Object => JSON.parse(line)),
+    r.filter((line) => line.type === 'inspect'),
+    r.map(r.prop('data')),
+    r.reduce(r.merge, {}),
+  )(configStr);
+
+  // return JSON.parse(configStr);
 };
 
 export type GetNpmRegistry = (pkg: Package) => string;

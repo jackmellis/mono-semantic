@@ -43,7 +43,7 @@ describe('common / config ', function() {
 
   describe('getNpmConfig', function() {
     beforeEach(function() {
-      this.shell = sinon.stub().returns('{"registry":"test-registry.com"}');
+      this.shell = sinon.stub().returns('{ "type": "inspect", "data": {"registry":"test-registry.com"} }');
       this.getNpmConfig = getNpmConfig(this.shell);
     });
     it('returns the npm config', function(){
