@@ -33,6 +33,11 @@ export default (
     r.map(r.pipe(
       r.pick([ 'name', 'version' ]),
       r.values,
+      r.tap(([ n: string, v: string ]) => {
+        if (!v || v === '0.0.0') {
+          throw new Error(`Dependency ${n} of ${pkg.scope} has not been released`);
+        }
+      }),
       ([ n: string, v: string ]) => ([ n, `^${v}` ]),
     )),
     r.fromPairs,
