@@ -5,6 +5,8 @@ import type { Package } from '../../annotations';
 import type { TransformCommit } from './transformCommit';
 import type { PackageRelease } from '../../commits/getPackageReleases';
 import { join } from 'path';
+import * as r from 'ramda';
+import { whileNil } from '../../common/utils';
 
 export type WriteChangelog = (
   pkg: Package,
@@ -15,6 +17,7 @@ export default (
   changelog: ConventionalChangelog,
   transformCommit: TransformCommit,
   fs: Fs,
+  rootPackage: Package,
 ): WriteChangelog => (pkg, releases) => {
   // TODO: get this from userConfig
   const { scope } = pkg;
@@ -40,8 +43,10 @@ export default (
         },
       },
       {
-        // TODO: at some point validate that pkg.repository exists
-        repoUrl: pkg.repository.url,
+        repoUrl: whileNil(
+          r.path([ 'repository', 'url' ]),
+          r.always(r.path([ 'repository', 'url' ], rootPackage)),
+        )(pkg),
       },
     ).pipe(writeStream);
 

@@ -34,7 +34,8 @@ export default (deps: Dependencies) => {
   const getPackages = composeGetPackages(
     deps.external.fs,
     userConfig,
-    deps.external.npmlog
+    deps.external.npmlog,
+    config.rootPackage,
   );
 
   const writePackage = composeWritePackage(deps.external.fs);

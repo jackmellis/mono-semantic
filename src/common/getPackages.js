@@ -13,6 +13,7 @@ export default (
   fs: Fs,
   userConfig: UserConfig,
   log: Log,
+  rootPackage: Package,
 ): GetPackages => () => {
   log.verbose(
     'getPackages',
@@ -44,7 +45,16 @@ export default (
     if (!pkg.name) {
       throw new Error(`Package name missing from ${pkg.scope}`);
     }
-    if (!pkg.repository || !pkg.repository.url) {
+    if (r.both(
+      r.pipe(
+        r.always(r.path([ 'repository', 'url' ], pkg)),
+        r.isNil,
+      ),
+      r.pipe(
+        r.always(r.path([ 'repository', 'url' ], rootPackage)),
+        r.isNil,
+      ),
+    )(null)) {
       throw new Error(`repository.url is missing from ${pkg.scope}`);
     }
 

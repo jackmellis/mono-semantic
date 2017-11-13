@@ -1,5 +1,5 @@
 // @flow
-import type { Log, CreatePlugins } from '../../external';
+import type { Log, CreatePlugins, Fs } from '../../external';
 import type { Shell } from '../shell';
 import { whileNil } from '../utils';
 import type {
@@ -17,6 +17,15 @@ const charAt = r.curry((i: number, str: string) => str.charAt(i));
 
 const analyzeCommitsPath = join(__dirname, '../../plugins/analyzeCommits');
 const generateNotesPath = join(__dirname, '../../plugins/generateNotes');
+
+export type GetRootPackage = () => Package;
+export const getRootPackage = (
+  fs: Fs,
+): GetRootPackage => () => {
+  const target = join(resolve('.'), 'package.json');
+  const str = fs.readFileSync(target, 'utf8');
+  return JSON.parse(str);
+};
 
 export type GetUserConfig = () => UserConfig;
 export const getUserConfig = (config: Object): GetUserConfig => () => {
@@ -41,7 +50,8 @@ export const getNpmConfig = (
 export type GetNpmRegistry = (pkg: Package) => string;
 export const getNpmRegistry = (
   userConfig: UserConfig,
-  npmConfig: NpmConfig
+  npmConfig: NpmConfig,
+  rootPackage: Package,
 ): GetNpmRegistry => (pkg) => {
   const registry = whileNil(
     r.always(userConfig.registry),
@@ -64,6 +74,8 @@ export const getNpmRegistry = (
       ),
       r.always(null),
     ),
+    r.always(r.path([ 'release', 'registry' ], rootPackage)),
+    r.always(r.path([ 'publishConfig', 'registry' ], rootPackage)),
     r.always(r.prop('registry', npmConfig)),
     r.always('https://registry.npmjs.org'),
   )(pkg);
@@ -77,6 +89,7 @@ export const getNpm = (
   npmConfig: NpmConfig,
   userConfig: UserConfig,
   getRegistry: GetNpmRegistry,
+  rootPackage: Package,
 ): GetNpm => (pkg) => {
   const registry = getRegistry(pkg);
   const loglevel = whileNil(
@@ -87,6 +100,8 @@ export const getNpm = (
   const tag: string = whileNil(
     r.path([ 'release', 'tag' ]),
     r.path([ 'publishConfig', 'tag' ]),
+    r.always(r.path([ 'release', 'tag' ], rootPackage)),
+    r.always(r.path([ 'publishConfig', 'tag' ], rootPackage)),
     r.always(r.prop('tag', npmConfig)),
     r.always('latest'),
   )(pkg);
@@ -139,11 +154,13 @@ export type GetSemanticReleaseOptions = (pkg: Package) => SemanticReleaseOptions
 export const getSemanticReleaseOptions = (
   env: Env,
   userConfig: UserConfig,
+  rootPackage: Package,
 ): GetSemanticReleaseOptions => (pkg) => {
   const options = {
     branch: whileNil(
       r.always(userConfig.branch),
       r.path([ 'release', 'branch' ]),
+      r.always(r.path([ 'release', 'branch' ], rootPackage)),
       r.always('master'),
     )(pkg),
     debug: whileNil(

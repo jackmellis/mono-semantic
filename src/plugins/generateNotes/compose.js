@@ -38,6 +38,7 @@ export default () => {
     conventionalChangelog,
     transformCommit,
     deps.external.fs,
+    deps.common.config.rootPackage,
   );
 
   const generateNotes = composeGenerateNotes(

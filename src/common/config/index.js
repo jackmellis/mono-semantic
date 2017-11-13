@@ -1,7 +1,7 @@
 // @flow
 import type { Shell } from '../shell';
 import type { Env } from '../../annotations';
-import type { CreatePlugins, Log } from '../../external';
+import type { CreatePlugins, Log, Fs } from '../../external';
 import * as _config from './config';
 
 type Dependencies = {
@@ -11,28 +11,37 @@ type Dependencies = {
     env: Env,
     createPlugins: CreatePlugins,
     npmlog: Log,
+    fs: Fs,
   },
 };
 export default (deps: Dependencies) => {
   const getUserConfig = _config.getUserConfig(deps.userConfig);
   const getNpmConfig = _config.getNpmConfig(deps.shell);
+  const getRootPackage = _config.getRootPackage(deps.external.fs);
 
   const userConfig = getUserConfig();
   const npmConfig = getNpmConfig();
+  const rootPackage = getRootPackage();
 
-  const getNpmRegistry = _config.getNpmRegistry(userConfig, npmConfig);
+  const getNpmRegistry = _config.getNpmRegistry(
+    userConfig,
+    npmConfig,
+    rootPackage,
+  );
   const getNpm = _config.getNpm(
     deps.external.npmlog,
     npmConfig,
     userConfig,
-    getNpmRegistry
+    getNpmRegistry,
+    rootPackage,
   );
   const getSemanticReleasePlugins = _config.getSemanticReleasePlugins(
     deps.external.createPlugins
   );
   const getSemanticReleaseOptions = _config.getSemanticReleaseOptions(
     deps.external.env,
-    userConfig
+    userConfig,
+    rootPackage,
   );
   const getSemanticReleaseConfig = _config.getSemanticReleaseConfig(
     getNpm,
@@ -42,6 +51,7 @@ export default (deps: Dependencies) => {
   );
 
   return {
+    rootPackage,
     userConfig,
     npmConfig,
     getUserConfig,
