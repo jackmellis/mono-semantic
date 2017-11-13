@@ -14,6 +14,11 @@ export default (
   userConfig: UserConfig,
   log: Log,
 ): GetPackages => () => {
+  log.verbose(
+    'getPackages',
+    'looking for packages in %s',
+    userConfig.pathToPackages,
+  );
   const packageScopes = fs.readdirSync(userConfig.pathToPackages);
 
   const allPackages: Array<Package> = r.map((scope) => {
@@ -32,6 +37,27 @@ export default (
       }),
     )(pkg);
   }, packageScopes);
+
+  // Validate packages
+  log.verbose('getPackages', 'Validating packages');
+  r.forEach((pkg) => {
+    if (!pkg.name) {
+      throw new Error(`Package name missing from ${pkg.scope}`);
+    }
+    if (!pkg.repository || !pkg.repository.url) {
+      throw new Error(`repository.url is missing from ${pkg.scope}`);
+    }
+
+    if (pkg.name.charAt(0) === '@') {
+      if (!pkg.config || pkg.config.access !== 'public') {
+        log.warn(
+          'getPackages',
+          '%s is a scoped package but does not have public access',
+          pkg.scope,
+        );
+      }
+    }
+  }, allPackages);
 
   const packageNames = r.map(r.prop('name'), allPackages);
 

@@ -43,7 +43,7 @@ export const getNpmRegistry = (
   userConfig: UserConfig,
   npmConfig: NpmConfig
 ): GetNpmRegistry => (pkg) => {
-  return whileNil(
+  const registry = whileNil(
     r.always(userConfig.registry),
     r.path([ 'release', 'registry' ]),
     r.path([ 'publishConfig', 'registry' ]),
@@ -67,6 +67,8 @@ export const getNpmRegistry = (
     r.always(r.prop('registry', npmConfig)),
     r.always('https://registry.npmjs.org'),
   )(pkg);
+
+  return registry;
 };
 
 export type GetNpm = (pkg: Package) => Npm;
@@ -141,8 +143,7 @@ export const getSemanticReleaseOptions = (
   env: Env,
   userConfig: UserConfig,
 ): GetSemanticReleaseOptions => (pkg) => {
-  // TODO: throw if githubToken or githubUrl are missing
-  return {
+  const options = {
     branch: whileNil(
       r.always(userConfig.branch),
       r.path([ 'release', 'branch' ]),
@@ -175,6 +176,25 @@ export const getSemanticReleaseOptions = (
     )(pkg),
     fallbackTags: { next: 'latest' },
   };
+
+  if (!options.githubToken) {
+    throw new Error(
+      'No github token provided.' +
+      ' Please provide a github-token argument,' +
+      ' set the package\'s release.githubToken,' +
+      ' or set the GH_TOKEN/GITHUB_TOKEN environment variables'
+    );
+  }
+  if (!options.githubUrl) {
+    throw new Error(
+      'No github token provided.' +
+      ' Please provide a github-token argument,' +
+      ' set the package\'s release.githubToken,' +
+      ' or set the GH_TOKEN/GITHUB_TOKEN environment variables'
+    );
+  }
+
+  return options;
 };
 
 export type SemanticReleaseConfig = {
