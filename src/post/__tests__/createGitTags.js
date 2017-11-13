@@ -6,6 +6,9 @@ import composeCreateGitTags from '../createGitTags';
 describe('post / createGitTags', function(){
   beforeEach(function(){
     const pkg = this.pkg = {
+      name: '@my-scope/my-package',
+      scope: 'my-package',
+      version: '1.2.3',
       repository: {
         url: 'https://github.com/owner/repo',
       }
@@ -14,17 +17,7 @@ describe('post / createGitTags', function(){
       info: sinon.spy(),
       verbose: sinon.spy(),
     };
-    const agent = this.agent = {
-      gitdata: {
-        createReference: sinon.stub().resolves(),
-      },
-      repos: {
-        createRelease: sinon.stub().resolves(),
-      },
-    };
-    const getGitAgent = this.getGitAgent = sinon.stub().returns(agent);
-    const release = this.release = {};
-    const getRelease = this.getRelease = sinon.stub().returns(release);
+    const shell = this.shell = sinon.stub();
     const config = this.config = {
       options: {
         debug: false,
@@ -35,8 +28,7 @@ describe('post / createGitTags', function(){
 
     this.createGitTags = composeCreateGitTags(
       log,
-      getGitAgent,
-      getRelease,
+      shell,
       getConfig,
       gitHead
     );
@@ -49,27 +41,21 @@ describe('post / createGitTags', function(){
   });
   context('when in debug/draft mode', function () {
     it('does not create a reference', async function () {
-      const { pkg, createGitTags, config, agent } = this;
+      const { pkg, createGitTags, config, shell } = this;
       config.options.debug = true;
       const result = await createGitTags(pkg);
 
-      expect(agent.gitdata.createReference.called).to.be.false;
-      expect(agent.repos.createRelease.called).to.be.false;
+      expect(shell.called).to.be.false;
     });
   });
   context('when in release mode', function () {
     it('creates a reference', async function () {
-      const { pkg, createGitTags, config, agent } = this;
+      const { pkg, createGitTags, config, shell } = this;
       const result = await createGitTags(pkg);
 
-      expect(agent.gitdata.createReference.called).to.be.true;
-    });
-    it('creates a release', async function () {
-      const { pkg, createGitTags, config, agent, release } = this;
-      const result = await createGitTags(pkg);
-
-      expect(agent.repos.createRelease.called).to.be.true;
-      expect(agent.repos.createRelease.calledWith(release)).to.be.true;
+      expect(shell.called).to.be.true;
+      console.log(shell.lastCall.args[0])
+      expect(shell.calledWith('git tag -a my-package@1.2.3 my-sha -m "my-package@1.2.3"')).to.be.true;
     });
   });
 });

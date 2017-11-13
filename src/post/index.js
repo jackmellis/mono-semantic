@@ -2,8 +2,6 @@
 import composeExternal from '../external';
 import composeCommon from '../common';
 import composeCommits from '../commits';
-import composeGetGitAgent, { createGitAgent } from './getGitAgent';
-import composeGetReleaseInfo from './getReleaseInfo';
 import composeCreateGitTags from './createGitTags';
 import composeGenerateChangelog from './generateChangelog';
 import composeRestorePackage from './restorePackage';
@@ -40,19 +38,9 @@ module.exports = (userConfig: Object) => {
     commits,
   };
 
-  const getGitAgent = composeGetGitAgent(
-    createGitAgent,
-    deps.common.config.getSemanticReleaseConfig,
-  );
-
-  const getReleaseInfo = composeGetReleaseInfo(
-    deps.common.config.getSemanticReleaseConfig,
-  );
-
   const createGitTags = composeCreateGitTags(
     deps.external.npmlog,
-    getGitAgent,
-    getReleaseInfo,
+    deps.common.shell,
     deps.common.config.getSemanticReleaseConfig,
     deps.external.gitHead,
   );

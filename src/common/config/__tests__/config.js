@@ -287,22 +287,6 @@ describe('common / config ', function() {
 
       expect(result).to.be.instanceof(Object);
       expect(result.branch).to.equal('master');
-      expect(result.githubToken).to.equal(env.GH_TOKEN);
-      expect(result.githubUrl).to.equal(env.GH_URL);
-    });
-    it('throws an error if github token is missing', function () {
-      const env = {
-        GH_URL: 'github-url',
-      };
-
-      expect(() => getSemanticReleaseOptions(env, {})({})).to.throw();
-    });
-    it('throws an error if github url is missing', function () {
-      const env = {
-        GH_TOKEN: 'github-token',
-      };
-
-      expect(() => getSemanticReleaseOptions(env, {})({})).to.throw();
     });
     it('merges options with package-specific options', function(){
       const pkg = {
@@ -316,8 +300,6 @@ describe('common / config ', function() {
       const result = getSemanticReleaseOptions({}, {})(pkg);
 
       expect(result.branch).to.equal('develop');
-      expect(result.githubToken).to.equal('xxxx');
-      expect(result.githubUrl).to.equal('github-url');
 
       expect(result.debug).to.be.true; // not package-specific
     });

@@ -54,12 +54,6 @@ export type Npm = {
 // environment variables
 export type Env = {
   CI: ?string,
-  GH_TOKEN: ?string,
-  GITHUB_TOKEN: ?string,
-  GH_URL: ?string,
-  GITHUB_URL: ?string,
-  GH_API_PATH_PREFIX: ?string,
-  GITHUB_API_PATH_PREFIX: ?string,
 };
 
 // options passed into the cli

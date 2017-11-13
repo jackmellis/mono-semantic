@@ -132,9 +132,6 @@ export type SemanticReleaseOptions = {
   branch: string,
   fallbackTags: Object,
   debug: boolean,
-  githubToken: string,
-  githubUrl: string,
-  githubApiPathPrefix: string,
 };
 // eslint-disable-next-line max-len
 export type GetSemanticReleaseOptions = (pkg: Package) => SemanticReleaseOptions;
@@ -153,46 +150,8 @@ export const getSemanticReleaseOptions = (
       r.always(userConfig.debug),
       r.always(!env.CI),
     )(pkg),
-    githubToken: whileNil(
-      r.always(userConfig.githubToken),
-      r.path([ 'release', 'githubToken' ]),
-      r.always(env.GH_TOKEN),
-      r.always(env.GITHUB_TOKEN),
-      r.always(''),
-    )(pkg),
-    githubUrl: whileNil(
-      r.always(userConfig.githubUrl),
-      r.path([ 'release', 'githubUrl' ]),
-      r.always(env.GH_URL),
-      r.always(env.GITHUB_URL),
-      r.always(''),
-    )(pkg),
-    githubApiPathPrefix: whileNil(
-      r.always(userConfig.githubApiPathPrefix),
-      r.path([ 'release', 'githubApiPathPrefix' ]),
-      r.always(env.GH_API_PATH_PREFIX),
-      r.always(env.GITHUB_API_PATH_PREFIX),
-      r.always(''),
-    )(pkg),
     fallbackTags: { next: 'latest' },
   };
-
-  if (!options.githubToken) {
-    throw new Error(
-      'No github token provided.' +
-      ' Please provide a github-token argument,' +
-      ' set the package\'s release.githubToken,' +
-      ' or set the GH_TOKEN/GITHUB_TOKEN environment variables'
-    );
-  }
-  if (!options.githubUrl) {
-    throw new Error(
-      'No github token provided.' +
-      ' Please provide a github-token argument,' +
-      ' set the package\'s release.githubToken,' +
-      ' or set the GH_TOKEN/GITHUB_TOKEN environment variables'
-    );
-  }
 
   return options;
 };

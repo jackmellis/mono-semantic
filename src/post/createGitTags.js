@@ -2,9 +2,8 @@
 import type { GitHead, Log } from '../external';
 import type { Package } from '../annotations';
 import type { GetSemanticReleaseConfig } from '../common/config/config';
-import type { GetGitAgent } from './getGitAgent';
-import type { GetReleaseInfo } from './getReleaseInfo';
-import { getPackageSlug, getReleaseTagName } from './utils';
+import type { Shell } from '../common/shell';
+import { getReleaseTagName } from './utils';
 
 export type CreateGitTags = (
   pkg: Package,
@@ -12,38 +11,19 @@ export type CreateGitTags = (
 
 export default (
   log: Log,
-  getGitAgent: GetGitAgent,
-  getReleaseInfo: GetReleaseInfo,
+  shell: Shell,
   getConfig: GetSemanticReleaseConfig,
   gitHead: GitHead,
 ): CreateGitTags => async(pkg) => {
   const config = getConfig(pkg);
-  const git = getGitAgent(pkg);
   const name = getReleaseTagName(pkg);
-  const {
-    owner, repo,
-  } = getPackageSlug(pkg);
-  const ref = `refs/tags/${name}`;
-  const release = getReleaseInfo(pkg);
   const sha = await gitHead();
 
-  const tag = {
-    owner,
-    repo,
-    ref,
+  log.verbose(
+    'post',
+    'Creating git tag: %s (%s)',
+    name,
     sha,
-  };
-
-  log.verbose(
-    'post',
-    'Creating git tag: %j',
-    tag,
-  );
-
-  log.verbose(
-    'post',
-    'Creating release: %j',
-    release,
   );
 
   if (config.options.debug) {
@@ -51,8 +31,8 @@ export default (
     return pkg;
   }
 
-  await git.gitdata.createReference(tag);
-  await git.repos.createRelease(release);
+  const cmd = `git tag -a ${name} ${sha} -m "${name}"`;
+  shell(cmd);
 
   return pkg;
 };
