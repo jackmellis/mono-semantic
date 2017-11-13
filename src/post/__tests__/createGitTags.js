@@ -54,14 +54,7 @@ describe('post / createGitTags', function(){
       const result = await createGitTags(pkg);
 
       expect(agent.gitdata.createReference.called).to.be.false;
-    });
-    it('creates a release', async function () {
-      const { pkg, createGitTags, config, agent, release } = this;
-      config.options.debug = true;
-      const result = await createGitTags(pkg);
-
-      expect(agent.repos.createRelease.called).to.be.true;
-      expect(agent.repos.createRelease.calledWith(release)).to.be.true;
+      expect(agent.repos.createRelease.called).to.be.false;
     });
   });
   context('when in release mode', function () {

@@ -26,7 +26,6 @@ export default (
 
   log.info('generateNotes', 'Generating notes for %s', scope);
 
-  // TODO: make this a userConfig option
   const pathToChangelog = join(pkg.physicalLocation, 'CHANGELOG.md');
 
   const releases = await getPackageReleases(pkg);

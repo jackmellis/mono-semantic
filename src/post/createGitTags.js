@@ -47,11 +47,11 @@ export default (
   );
 
   if (config.options.debug) {
-    log.info('post', `Creating draft release ${name}`);
-  } else {
-    await git.gitdata.createReference(tag);
-    log.info('post', `Creating release ${name}`);
+    log.info('post', 'Skipping release of package %s - debug mode', pkg.scope);
+    return pkg;
   }
+
+  await git.gitdata.createReference(tag);
   await git.repos.createRelease(release);
 
   return pkg;
