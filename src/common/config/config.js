@@ -15,8 +15,8 @@ import { join, resolve } from 'path';
 
 const charAt = r.curry((i: number, str: string) => str.charAt(i));
 
-const analyzeCommitsPath = join(__dirname, '../plugins/analyzeCommits');
-const generateNotesPath = join(__dirname, '../plugins/generateNotes');
+const analyzeCommitsPath = join(__dirname, '../../plugins/analyzeCommits');
+const generateNotesPath = join(__dirname, '../../plugins/generateNotes');
 
 export type GetUserConfig = () => UserConfig;
 export const getUserConfig = (config: Object): GetUserConfig => () => {
