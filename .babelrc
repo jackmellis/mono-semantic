@@ -14,5 +14,5 @@
     "ramda",
     "transform-flow-strip-types"
   ],
-  "sourceMaps": true
+  "sourceMaps": false
 }
