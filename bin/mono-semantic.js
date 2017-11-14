@@ -49,7 +49,7 @@ case 'post':
 default:
   throw new Error(`Unknown process: ${mode}`);
 }
-
+debugger;
 const process = require(`../dist/${mode}`)(options);
 
 process(options);

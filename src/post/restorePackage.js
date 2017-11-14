@@ -14,10 +14,6 @@ export type RestorePackage = (
 export default (
   log: Log,
 ): RestorePackage => (allPackages, pkg) => {
-  if (!pkg.releaseType) {
-    return pkg;
-  }
-
   log.info('post', 'Restoring package %s', pkg.scope);
   log.verbose('post', 'Removing releaseType');
   log.verbose('post', 'Removing gitHead');

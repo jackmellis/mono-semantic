@@ -25,7 +25,10 @@ export default (
     r.ifElse(
       r.pipe(
         r.pathOr('', [ 'message' ]),
-        r.contains('404'),
+        r.either(
+          r.contains('404'),
+          r.contains('no such package available'),
+        ),
       ),
       r.pipe(
         r.tap(() => log.info(

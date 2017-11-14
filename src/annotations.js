@@ -13,11 +13,9 @@ export type Package = {
     url: string,
   },
   private: boolean,
-  config?: {
-    access?: string,
-  },
   // semantic-release properties
   publishConfig?: {
+    access?: string,
     repository: string,
     tag: string,
   },

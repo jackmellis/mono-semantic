@@ -1,5 +1,5 @@
 // @flow
-import type { Log } from '../external';
+import type { Log, Process } from '../external';
 import type { Package } from '../annotations';
 import type { Shell } from '../common/shell';
 import type { GetSemanticReleaseConfig } from '../common/config/config';
@@ -13,6 +13,7 @@ export default (
   log: Log,
   shell: Shell,
   getConfig: GetSemanticReleaseConfig,
+  process: Process,
 ): PublishPackage => (pkg) => {
   if (pkg.private) {
     log.warn(
@@ -39,9 +40,9 @@ export default (
         r.prop('name'),
         startsWithAt,
       ),
-      r.pathEq([ 'config', 'access' ], 'public'),
+      r.pathEq([ 'publishConfig', 'access' ], 'public'),
     ),
-    r.always('--access=public'),
+    r.always('--access public'),
     r.always(''),
   )(pkg);
 
@@ -51,7 +52,7 @@ export default (
   const tag = options.npm.tag;
 
   // const cmd = `npm publish ${access} --tag ${tag} ${target}`;
-  const cmd = `yarn publish ${access} --tag ${tag} ${target}`;
+  const cmd = `yarn publish --new-version ${pkg.version} ${access} --tag ${tag}`;
 
   if (options.options.debug) {
     log.verbose('publish', cmd);
@@ -60,7 +61,14 @@ export default (
   }
 
   log.info('publish', 'Publishing %s', pkg.name);
+  log.info('publish', cmd);
+
+  const cwd = process.cwd();
+  process.chdir(target);
+
   shell(cmd);
+
+  process.chdir(cwd);
 
   return pkg;
 };

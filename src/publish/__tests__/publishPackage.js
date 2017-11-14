@@ -6,6 +6,7 @@ import composePublishPackage from '../publishPackage';
 describe('publish / publishPackage', function(){
   beforeEach(function(){
     const pkg = this.pkg = {
+      version: '1.2.3',
       private: false,
       releaseType: 'minor',
       name: 'package1',
@@ -26,11 +27,16 @@ describe('publish / publishPackage', function(){
     };
     const shell = this.shell = sinon.spy();
     const getConfig = this.getConfig = sinon.stub().returns(config);
+    const process = this.process = {
+      cwd: sinon.stub().returns('current_dir'),
+      chdir: sinon.spy(),
+    };
 
     this.publishPackage = composePublishPackage(
       log,
       shell,
-      getConfig
+      getConfig,
+      process,
     );
   });
 
@@ -44,7 +50,7 @@ describe('publish / publishPackage', function(){
   });
   it('runs a publish command', function () {
     const { pkg, publishPackage, shell } = this;
-    const expected = 'yarn publish  --tag latest /path/to/package';
+    const expected = 'yarn publish --new-version 1.2.3  --tag latest';
 
     publishPackage(pkg);
 
@@ -54,9 +60,9 @@ describe('publish / publishPackage', function(){
   context('when package is scoped', function () {
     it('adds a public access flag', function () {
       const { pkg, publishPackage, shell } = this;
-      const expected = 'yarn publish --access=public --tag latest /path/to/package';
+      const expected = 'yarn publish --new-version 1.2.3 --access public --tag latest';
       pkg.name = '@scope/package1';
-      pkg.config = {
+      pkg.publishConfig = {
         access: 'public',
       };
 
@@ -67,7 +73,7 @@ describe('publish / publishPackage', function(){
     });
     it('does not add an access flag if package is private', function () {
       const { pkg, publishPackage, shell } = this;
-      const expected = 'yarn publish  --tag latest /path/to/package';
+      const expected = 'yarn publish --new-version 1.2.3  --tag latest';
       pkg.name = '@scope/package1';
       pkg.config = null;
 
@@ -79,7 +85,7 @@ describe('publish / publishPackage', function(){
   });
   it('adds the config tag to the command', function () {
     const { pkg, publishPackage, config, shell } = this;
-    const expected = 'yarn publish  --tag next /path/to/package';
+    const expected = 'yarn publish --new-version 1.2.3  --tag next';
     config.npm.tag = 'next';
 
     publishPackage(pkg);

@@ -23,6 +23,7 @@ export type Log = typeof npmlog;
 
 export type CreatePlugins = typeof createPlugins;
 
+export type Process = typeof process;
 
 // $FlowFixMe - can't coerce Promise<any> into Promise<string>!
 const versionToCommitP: VersionToCommit = promisify(versionToCommit);
@@ -38,5 +39,6 @@ export default () => {
     env: process.env,
     versionToCommit: versionToCommitP,
     gitHead: gitHeadp,
+    process,
   };
 };

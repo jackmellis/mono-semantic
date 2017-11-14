@@ -40,3 +40,5 @@ export const findPackage = (
 ) => (
   name: string
 ): ?Package => r.find(r.propEq('name', name), allPackages);
+
+export const charAt = r.curry((i: number, str: string) => str.charAt(i));

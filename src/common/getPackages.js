@@ -4,7 +4,7 @@ import type { Package, UserConfig } from '../annotations';
 
 import * as r from 'ramda';
 import { join } from 'path';
-import { parse, findPackage } from '../common/utils';
+import { parse, findPackage, charAt } from '../common/utils';
 
 const inList = r.flip(r.contains);
 
@@ -58,15 +58,26 @@ export default (
       throw new Error(`repository.url is missing from ${pkg.scope}`);
     }
 
-    if (pkg.name.charAt(0) === '@') {
-      if (!pkg.config || pkg.config.access !== 'public') {
+    r.when(
+      r.both(
+        r.pipe(
+          r.prop('name'),
+          charAt(0),
+          r.equals('@'),
+        ),
+        r.pipe(
+          r.path([ 'publishConfig', 'access' ]),
+          r.complement(r.equals('public')),
+        ),
+      ),
+      () => {
         log.warn(
           'getPackages',
           '%s is a scoped package but does not have public access',
           pkg.scope,
         );
       }
-    }
+    )(pkg);
   }, allPackages);
 
   const packageNames = r.map(r.prop('name'), allPackages);

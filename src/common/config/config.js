@@ -1,7 +1,7 @@
 // @flow
 import type { Log, CreatePlugins, Fs } from '../../external';
 import type { Shell } from '../shell';
-import { whileNil } from '../utils';
+import { whileNil, charAt } from '../utils';
 import type {
   Package,
   NpmConfig,
@@ -12,8 +12,6 @@ import type {
 
 import * as r from 'ramda';
 import { join, resolve } from 'path';
-
-const charAt = r.curry((i: number, str: string) => str.charAt(i));
 
 const analyzeCommitsPath = join(__dirname, '../../plugins/analyzeCommits');
 const generateNotesPath = join(__dirname, '../../plugins/generateNotes');

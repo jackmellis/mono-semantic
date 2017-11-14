@@ -6,7 +6,9 @@ import composeUpdateGitHead from '../updateGitHead';
 describe('publish / updateGitHead', function(){
   it('adds a gitHead property to the package', async function(){
     const gitHead = sinon.stub().resolves('commit-hash');
-    const pkg = {};
+    const pkg = {
+      releaseType: 'initial',
+    };
     const updateGitHead = composeUpdateGitHead(gitHead);
 
     const result = await updateGitHead(pkg);

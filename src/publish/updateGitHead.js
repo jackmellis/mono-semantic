@@ -10,6 +10,10 @@ export type UpdateGitHead = (
 export default (
   gitHead: GitHead,
 ): UpdateGitHead => async(pkg) => {
+  if (!pkg.releaseType) {
+    return pkg;
+  }
+
   const sha = await gitHead();
 
   return r.assoc('gitHead', sha, pkg);

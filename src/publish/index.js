@@ -29,7 +29,8 @@ module.exports = (userConfig: Object) => {
   const publishPackage = composePublishPackage(
     deps.external.npmlog,
     deps.common.shell,
-    deps.common.config.getSemanticReleaseConfig
+    deps.common.config.getSemanticReleaseConfig,
+    deps.external.process,
   );
 
   const publish = composePublish(
