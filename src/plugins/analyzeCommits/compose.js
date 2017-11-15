@@ -29,7 +29,7 @@ export default () => {
   };
 
   const analyzeCommits = composeAnalyzeCommits(
-    deps.external.npmlog,
+    deps.common.log,
     deps.commits.filterValidCommits,
     commitAnalyzer,
   );

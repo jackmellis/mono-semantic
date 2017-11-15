@@ -1,5 +1,5 @@
 // @flow
-import type { Log, CreatePlugins, Fs } from '../../external';
+import type { CreatePlugins, Fs } from '../../external';
 import type { Shell } from '../shell';
 import { whileNil, charAt } from '../utils';
 import type {
@@ -97,7 +97,6 @@ export const getNpmRegistry = (
 
 export type GetNpm = (pkg: Package) => Npm;
 export const getNpm = (
-  log: Log,
   npmConfig: NpmConfig,
   userConfig: UserConfig,
   getRegistry: GetNpmRegistry,
@@ -123,8 +122,6 @@ export const getNpm = (
     loglevel,
     tag,
   };
-
-  log.verbose('config', 'package config for %s: %j', pkg.scope, npm);
 
   return npm;
 };

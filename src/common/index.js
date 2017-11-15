@@ -6,6 +6,7 @@ import composeShell from './shell';
 import composeConfig from './config';
 import composeGetPackages from './getPackages';
 import composeWritePackage from './writePackage';
+import composeLog from './log';
 
 type Dependencies = {
   userConfig: Object,
@@ -19,7 +20,7 @@ type Dependencies = {
 };
 
 export default (deps: Dependencies) => {
-  const shell = composeShell(
+  let shell = composeShell(
     deps.external.shelljs,
     deps.external.npmlog,
   );
@@ -31,6 +32,18 @@ export default (deps: Dependencies) => {
 
   const userConfig = config.getUserConfig();
 
+  const log = composeLog(
+    config.npmConfig,
+    userConfig,
+    deps.external.npmlog
+  );
+
+  // now we need to recompose shell using the "official" logger
+  shell = composeShell(
+    deps.external.shelljs,
+    log
+  );
+
   const getPackages = composeGetPackages(
     deps.external.fs,
     userConfig,
@@ -41,6 +54,7 @@ export default (deps: Dependencies) => {
   const writePackage = composeWritePackage(deps.external.fs);
 
   return {
+    log,
     shell,
     config,
     getPackages,

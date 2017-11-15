@@ -26,16 +26,16 @@ module.exports = (userConfig: Object) => {
   };
 
   const applyCurrentVersion = composeApplyCurrentVersion(
-    deps.external.npmlog,
+    deps.common.log,
     deps.common.shell
   );
 
   const bumpDependencies = composeBumpDependencies(
-    deps.external.npmlog
+    deps.common.log
   );
 
   const updateVersion = composeUpdateVersion(
-    deps.external.npmlog,
+    deps.common.log,
     semRelpre,
     deps.common.config.getSemanticReleaseConfig
   );
@@ -45,7 +45,7 @@ module.exports = (userConfig: Object) => {
   );
 
   const pre = composePre(
-    deps.external.npmlog,
+    deps.common.log,
     deps.common.getPackages,
     applyCurrentVersion,
     bumpDependencies,

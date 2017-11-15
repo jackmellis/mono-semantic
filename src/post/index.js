@@ -25,13 +25,6 @@ module.exports = (userConfig: Object) => {
     common,
   };
 
-  if (deps.userConfig.loglevel) {
-    deps.external.npmlog.level = userConfig.loglevel;
-    // $FlowFixMe
-  } else if (deps.common.config.npmConfig.loglevel) {
-    deps.external.npmlog.level = deps.common.config.npmConfig.loglevel;
-  }
-
   const commits = composeCommits(deps);
 
   deps = {
@@ -40,14 +33,14 @@ module.exports = (userConfig: Object) => {
   };
 
   const createGitTags = composeCreateGitTags(
-    deps.external.npmlog,
+    deps.common.log,
     deps.common.shell,
     deps.common.config.getSemanticReleaseConfig,
     deps.external.gitHead,
   );
 
   const generateChangelog = composeGenerateChangelog(
-    deps.external.npmlog,
+    deps.common.log,
     deps.common.config.getSemanticReleaseConfig
   );
 
@@ -56,11 +49,11 @@ module.exports = (userConfig: Object) => {
   );
 
   const restorePackage = composeRestorePackage(
-    deps.external.npmlog,
+    deps.common.log,
   );
 
   const post = composePost(
-    deps.external.npmlog,
+    deps.common.log,
     deps.common.getPackages,
     generateChangelog,
     createGitTags,

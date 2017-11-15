@@ -42,7 +42,7 @@ export default () => {
   );
 
   const generateNotes = composeGenerateNotes(
-    deps.external.npmlog,
+    deps.common.log,
     deps.external.fs,
     deps.commits.getPackageReleases,
     writeChangelog,

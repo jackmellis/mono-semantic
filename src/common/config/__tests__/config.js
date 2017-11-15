@@ -151,7 +151,6 @@ describe('common / config ', function() {
       };
       this.userConfig = {};
       this.getNpm = getNpm(
-        this.npmlog,
         this.npmconfig,
         this.userConfig,
         this.getRegistry,

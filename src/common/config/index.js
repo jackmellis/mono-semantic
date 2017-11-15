@@ -29,7 +29,6 @@ export default (deps: Dependencies) => {
     rootPackage,
   );
   const getNpm = _config.getNpm(
-    deps.external.npmlog,
     npmConfig,
     userConfig,
     getNpmRegistry,
