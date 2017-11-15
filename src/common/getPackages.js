@@ -94,35 +94,31 @@ export default (
   // Find only packages that are not dependend on first
   const root = r.filter(isNotADependency, allPackages);
 
-  const foldPackage = (pkg: Package) => {
-    // $FlowFixMe - flow does not understand that all nulls have been filtered
-    const deps: Array<Package> = r.pipe(
-      r.prop('dependencies'),
-      r.keys,
-      r.filter(inList(packageNames)),
-      r.map(findPackage(allPackages)),
-      r.filter((pkg) => pkg != null),
-    )(pkg);
+  let result: Array<Package> = [];
+  let currentPackages: Array<Package> = root;
 
-    // eslint-disable-next-line no-use-before-define
-    return foldPackages(deps);
-  };
+  while (currentPackages.length) {
+    result = r.concat(result, currentPackages);
+    // avoid duplicates
+    const donePackageNames = r.map(r.prop('name'), result);
 
-  const foldPackages = (packages: Array<Package>) => {
-    const deps = r.reduce(
-      (arr, pkg) => arr.concat(foldPackage(pkg)),
-      [],
-      packages
-    );
+    currentPackages = r.reduce((arr, pkg) => {
+      // $FlowFixMe
+      const children: Array<Package> = r.pipe(
+        r.prop('dependencies'),
+        r.keys,
+        r.filter(inList(packageNames)),
+        r.filter((dep) => !inList(donePackageNames, dep)),
+        r.map(findPackage(allPackages)),
+      )(pkg);
 
-    return r.concat(packages, deps);
-  };
+      return r.concat(arr, children);
+    }, [], currentPackages);
 
-  const result = r.pipe(
-    foldPackages,
-    r.reverse,
-    r.uniqBy(r.prop('name')),
-  )(root);
+    currentPackages = r.uniqBy(r.prop('name'), currentPackages);
+  }
+
+  result = r.reverse(result);
 
   log.info(
     'getPackages',
