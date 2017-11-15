@@ -42,7 +42,7 @@ export default (
       ),
       r.pathEq([ 'publishConfig', 'access' ], 'public'),
     ),
-    r.always('--access public'),
+    r.always('public'),
     r.always(''),
   )(pkg);
 
@@ -51,8 +51,22 @@ export default (
 
   const tag = options.npm.tag;
 
+  const cmd = r.pipe(
+    r.filter((cmd) => Boolean(cmd)),
+    r.join(' '),
+  )([
+    'yarn',
+    'publish',
+    '--new-version',
+    pkg.version,
+    access && '--access',
+    access,
+    '--tag',
+    tag,
+    '--ignore-scripts',
+  ]);
+
   // const cmd = `npm publish ${access} --tag ${tag} ${target}`;
-  const cmd = `yarn publish --new-version ${pkg.version} ${access} --tag ${tag}`;
 
   if (options.options.debug) {
     log.verbose('publish', cmd);

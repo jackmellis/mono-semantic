@@ -5,6 +5,7 @@ import type { WritePackage } from '../common/writePackage';
 import type { GenerateChangelog } from './generateChangelog';
 import type { CreateGitTags } from './createGitTags';
 import type { RestorePackage } from './restorePackage';
+import type { RunScripts } from './runScripts';
 
 export type Post = () => Promise<void>;
 
@@ -13,6 +14,7 @@ export default (
   getPackages: GetPackages,
   generateChangelog: GenerateChangelog,
   createGitTags: CreateGitTags,
+  runScripts: RunScripts,
   restorePackage: RestorePackage,
   writePackage: WritePackage,
 ): Post => async() => {
@@ -39,6 +41,7 @@ export default (
       }
 
       promise = promise
+        .then(runScripts)
         .then((pkg) => restorePackage(allPackages, pkg))
         .then(writePackage);
 

@@ -14,6 +14,7 @@ describe('post / restorePackage', function(){
       {
         name: '@scope/package1',
         scope: 'package1',
+        version: '2.0.0',
         releaseType: 'major',
         gitHead: 'sha123',
         changelog: 'some change happened',
@@ -44,6 +45,7 @@ describe('post / restorePackage', function(){
     const expected = {
       name: '@scope/package1',
       scope: 'package1',
+      version: '0.0.0',
     };
 
     expect(result).to.deep.equal(expected);

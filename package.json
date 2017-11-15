@@ -61,5 +61,8 @@
     "nyc": "^11.3.0",
     "rimraf": "^2.6.2",
     "sinon": "^4.1.1"
+  },
+  "peerDependencies": {
+    "lerna": "^2.x"
   }
 }

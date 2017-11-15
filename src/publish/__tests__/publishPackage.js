@@ -50,17 +50,18 @@ describe('publish / publishPackage', function(){
   });
   it('runs a publish command', function () {
     const { pkg, publishPackage, shell } = this;
-    const expected = 'yarn publish --new-version 1.2.3  --tag latest';
+    const expected = 'yarn publish --new-version 1.2.3 --tag latest --ignore-scripts';
 
     publishPackage(pkg);
 
     expect(shell.called).to.be.true;
-    expect(shell.calledWith(expected)).to.be.true;
+    const actual = shell.lastCall.args[0];
+    expect(actual).to.equal(expected);
   });
   context('when package is scoped', function () {
     it('adds a public access flag', function () {
       const { pkg, publishPackage, shell } = this;
-      const expected = 'yarn publish --new-version 1.2.3 --access public --tag latest';
+      const expected = 'yarn publish --new-version 1.2.3 --access public --tag latest --ignore-scripts';
       pkg.name = '@scope/package1';
       pkg.publishConfig = {
         access: 'public',
@@ -69,29 +70,32 @@ describe('publish / publishPackage', function(){
       publishPackage(pkg);
 
       expect(shell.called).to.be.true;
-      expect(shell.calledWith(expected)).to.be.true;
+      const actual = shell.lastCall.args[0];
+      expect(actual).to.equal(expected);
     });
     it('does not add an access flag if package is private', function () {
       const { pkg, publishPackage, shell } = this;
-      const expected = 'yarn publish --new-version 1.2.3  --tag latest';
+      const expected = 'yarn publish --new-version 1.2.3 --tag latest --ignore-scripts';
       pkg.name = '@scope/package1';
       pkg.config = null;
 
       publishPackage(pkg);
 
       expect(shell.called).to.be.true;
-      expect(shell.calledWith(expected)).to.be.true;
+      const actual = shell.lastCall.args[0];
+      expect(actual).to.equal(expected);
     });
   });
   it('adds the config tag to the command', function () {
     const { pkg, publishPackage, config, shell } = this;
-    const expected = 'yarn publish --new-version 1.2.3  --tag next';
+    const expected = 'yarn publish --new-version 1.2.3 --tag next --ignore-scripts';
     config.npm.tag = 'next';
 
     publishPackage(pkg);
 
     expect(shell.called).to.be.true;
-    expect(shell.calledWith(expected)).to.be.true;
+    const actual = shell.lastCall.args[0];
+    expect(actual).to.equal(expected);
   });
   it('does not run the publish command if in debug mode', function () {
     const { pkg, publishPackage, config, shell } = this;

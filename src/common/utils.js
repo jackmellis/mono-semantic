@@ -42,3 +42,12 @@ export const findPackage = (
 ): ?Package => r.find(r.propEq('name', name), allPackages);
 
 export const charAt = r.curry((i: number, str: string) => str.charAt(i));
+
+export const buildScriptCmd = (
+  pkg: Package
+) => (
+  scripts: Array<string>
+) => r.pipe(
+  r.map((script) => `yarn lerna --scope=${pkg.name} run ${script}`),
+  r.join(' && '),
+)(scripts);

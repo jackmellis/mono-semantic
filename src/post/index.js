@@ -5,6 +5,7 @@ import composeCommits from '../commits';
 import composeCreateGitTags from './createGitTags';
 import composeGenerateChangelog from './generateChangelog';
 import composeRestorePackage from './restorePackage';
+import composeRunScripts from './runScripts';
 import composePost from './post';
 
 // eslint-disable-next-line import/no-commonjs
@@ -50,6 +51,10 @@ module.exports = (userConfig: Object) => {
     deps.common.config.getSemanticReleaseConfig
   );
 
+  const runScripts = composeRunScripts(
+    deps.common.shell,
+  );
+
   const restorePackage = composeRestorePackage(
     deps.external.npmlog,
   );
@@ -59,6 +64,7 @@ module.exports = (userConfig: Object) => {
     deps.common.getPackages,
     generateChangelog,
     createGitTags,
+    runScripts,
     restorePackage,
     deps.common.writePackage,
   );

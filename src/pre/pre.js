@@ -5,6 +5,7 @@ import type { WritePackage } from '../common/writePackage';
 import type { ApplyCurrentVersion } from './applyCurrentVersion';
 import type { BumpDependencies } from './bumpDependencies';
 import type { UpdateVersion } from './updateVersion';
+import type { RunScripts } from './runScripts';
 import * as r from 'ramda';
 
 export type Pre = () => Promise<void>;
@@ -16,6 +17,7 @@ export default (
   bumpDependencies: BumpDependencies,
   updateVersion: UpdateVersion,
   writePackage: WritePackage,
+  runScripts: RunScripts,
 ): Pre => async() => {
   try {
     log.info('pre', 'Starting pre-release');
@@ -31,7 +33,8 @@ export default (
         .resolve(allPackages[x])
         .then((pkg) => bumpDependencies(allPackages, pkg))
         .then(updateVersion)
-        .then(writePackage);
+        .then(writePackage)
+        .then(runScripts);
     }
 
     log.info('pre', 'Finished pre-release');

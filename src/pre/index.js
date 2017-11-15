@@ -6,6 +6,7 @@ import composePre from './pre';
 import composeApplyCurrentVersion from './applyCurrentVersion';
 import composeBumpDependencies from './bumpDependencies';
 import composeUpdateVersion from './updateVersion';
+import composeRunScripts from './runScripts';
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = (userConfig: Object) => {
@@ -39,6 +40,10 @@ module.exports = (userConfig: Object) => {
     deps.common.config.getSemanticReleaseConfig
   );
 
+  const runScripts = composeRunScripts(
+    deps.common.shell
+  );
+
   const pre = composePre(
     deps.external.npmlog,
     deps.common.getPackages,
@@ -46,6 +51,7 @@ module.exports = (userConfig: Object) => {
     bumpDependencies,
     updateVersion,
     deps.common.writePackage,
+    runScripts,
   );
 
   return pre;

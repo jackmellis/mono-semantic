@@ -18,6 +18,7 @@ export default (
   log.verbose('post', 'Removing releaseType');
   log.verbose('post', 'Removing gitHead');
   log.verbose('post', 'Removing changelog');
+  log.verbose('post', 'Resetting version');
 
   const names = r.map(r.prop('name'), allPackages);
 
@@ -55,6 +56,7 @@ export default (
     r.dissoc('releaseType'),
     r.dissoc('gitHead'),
     r.dissoc('changelog'),
+    r.assoc('version', '0.0.0'),
     r.assoc('dependencies', r.merge(pkg.dependencies, links)),
   )(pkg);
 
