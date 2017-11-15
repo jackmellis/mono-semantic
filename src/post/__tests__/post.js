@@ -22,12 +22,14 @@ describe('post / post', function(){
     const createGitTags = this.createGitTags = reboundp();
     const restorePackage = this.restorePackage = rebound(1);
     const writePackage = this.writePackage = rebound();
+    const runScripts = this.runScripts = rebound();
 
     this.post = composePost(
       log,
       getPackages,
       generateChangelog,
       createGitTags,
+      runScripts,
       restorePackage,
       writePackage
     );
@@ -76,7 +78,8 @@ describe('post / post', function(){
       restorePackage,
       writePackage,
       generateChangelog,
-      createGitTags
+      createGitTags,
+      runScripts,
     } = this;
 
     packages.forEach((pkg) => pkg.releaseType = null);
@@ -85,6 +88,7 @@ describe('post / post', function(){
 
     expect(generateChangelog.called).to.be.false;
     expect(createGitTags.called).to.be.false;
+    expect(runScripts.called).to.be.false;
     expect(restorePackage.called).to.be.true;
     expect(writePackage.called).to.be.true;
   });

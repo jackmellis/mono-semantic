@@ -31,7 +31,8 @@ export default (
       if (pkg.releaseType) {
         promise = promise
           .then(generateChangelog)
-          .then(createGitTags);
+          .then(createGitTags)
+          .then(runScripts);
       } else {
         log.info(
           'post',
@@ -41,7 +42,6 @@ export default (
       }
 
       promise = promise
-        .then(runScripts)
         .then((pkg) => restorePackage(allPackages, pkg))
         .then(writePackage);
 

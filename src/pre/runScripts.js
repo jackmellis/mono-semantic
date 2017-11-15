@@ -14,9 +14,12 @@ export type RunScripts = (pkg: Package) => Package;
 export default (
   shell: Shell,
 ): RunScripts => (pkg) => {
-  const cmd = buildScriptCmd(pkg)(scripts);
-
-  shell(cmd);
+  if (pkg.releaseType) {
+    const cmd = buildScriptCmd(pkg)(scripts);
+    if (cmd){
+      shell(cmd);
+    }
+  }
 
   return pkg;
 };

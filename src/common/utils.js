@@ -48,6 +48,7 @@ export const buildScriptCmd = (
 ) => (
   scripts: Array<string>
 ) => r.pipe(
+  r.filter((script) => Boolean(r.path([ 'scripts', script ], pkg))),
   r.map((script) => `yarn lerna --scope=${pkg.name} run ${script}`),
   r.join(' && '),
 )(scripts);
