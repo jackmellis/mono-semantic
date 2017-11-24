@@ -40,7 +40,7 @@ export default (
     log.info('pre', 'Finished pre-release');
   } catch (e){
     log.error('pre', e.message);
-    log.info('pre', e);
+    log.verbose('pre', e);
     process.exit(1);
   }
 };

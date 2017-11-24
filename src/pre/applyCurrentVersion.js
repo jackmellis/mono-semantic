@@ -12,7 +12,7 @@ export default (
   shell: Shell,
 ): ApplyCurrentVersion => (pkg) => {
   // const cmd = `npm view ${pkg.name} version`;
-  const cmd = `yarn info ${pkg.name} version`;
+  const cmd = `yarn info ${pkg.name} version --silent`;
 
   log.verbose('pre', 'fetching current version of %s', pkg.scope);
 

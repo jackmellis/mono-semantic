@@ -25,7 +25,11 @@ export default (
   }
 
   if (!pkg.releaseType) {
-    log.info('publish', 'Skipping publish for %s - no new release', pkg.scope);
+    log.verbose(
+      'publish',
+      'Skipping publish for %s - no new release',
+      pkg.scope
+    );
     return pkg;
   }
 

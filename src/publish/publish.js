@@ -30,7 +30,7 @@ export default (
     log.info('publish', 'Finished publish');
   } catch (e){
     log.error('pre', e.message);
-    log.info('pre', e);
+    log.verbose('pre', e);
     process.exit(1);
   }
 };

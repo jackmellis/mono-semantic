@@ -82,43 +82,47 @@ export default (
 
   const packageNames = r.map(r.prop('name'), allPackages);
 
-  // Test if a package is used by any other packages
-  const isADependency = (pkg) => r.pipe(
-    r.map(r.prop('dependencies')),
-    r.map(r.keys),
-    r.flatten,
-    r.contains(pkg.name),
-  )(allPackages);
-  const isNotADependency = r.complement(isADependency);
+  let resultNames: Array<string> = [];
+  let left = allPackages;
+  let tries = 0;
 
-  // Find only packages that are not dependend on first
-  const root = r.filter(isNotADependency, allPackages);
+  const isPackageComplete = (pkg) => {
+    // get all of the package's dependencies
+    const allDependencies = r.pipe(
+      r.prop('dependencies'),
+      r.defaultTo({}),
+      r.keys,
+    )(pkg);
 
-  let result: Array<Package> = [];
-  let currentPackages: Array<Package> = root;
+    // get only dependencies that are other packages in this repo
+    // $FlowFixMe
+    const interDependencies = r.filter(inList(packageNames), allDependencies);
 
-  while (currentPackages.length) {
-    result = r.concat(result, currentPackages);
-    // avoid duplicates
-    const donePackageNames = r.map(r.prop('name'), result);
+    // check if all of the package's dependencies have been resolved already
+    const isComplete = r.all(inList(resultNames), interDependencies);
 
-    currentPackages = r.reduce((arr, pkg) => {
-      // $FlowFixMe
-      const children: Array<Package> = r.pipe(
-        r.prop('dependencies'),
-        r.keys,
-        r.filter(inList(packageNames)),
-        r.filter((dep) => !inList(donePackageNames, dep)),
-        r.map(findPackage(allPackages)),
-      )(pkg);
+    if (isComplete) {
+      resultNames = r.append(pkg.name, resultNames);
+      return false;
+    }
+    return true;
+  };
 
-      return r.concat(arr, children);
-    }, [], currentPackages);
-
-    currentPackages = r.uniqBy(r.prop('name'), currentPackages);
+  while (left.length && tries < 10000) {
+    tries = tries + 1;
+    left = r.filter(isPackageComplete, left);
   }
 
-  result = r.reverse(result);
+  if (left.length > 0) {
+    const remaining = r.pipe(
+      r.map(r.prop('name')),
+      r.join(', '),
+    )(left);
+    throw new Error(`Unable to resolve packages, you may have a circular dependency. The following packages could not be resolved: ${remaining}`);
+  }
+
+  // $FlowFixMe
+  const result: Array<Package> = r.map(findPackage(allPackages), resultNames);
 
   log.info(
     'getPackages',
