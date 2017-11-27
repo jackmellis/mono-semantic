@@ -5,7 +5,7 @@ Semantic Release for individual packages of a monorepo.
 - Resolves inter-dependent packages linked via `link:../linked-package`
 - Uses the angular commit style to assign commits to packages
 - Manage package versions independently
-- Create git releases
+- Create git tags
 - Generate individual changelogs for each package
 
 ## Installation
@@ -14,10 +14,18 @@ npm install -g mono-semantic
 ```
 
 ## Usage
-```
+```bash
+# Do your normal CI stuff
+yarn install
+yarn lerna bootstrap
+yarn lerna run test
+# Publish your mono-repo
 npm mono-semantic pre
 npm mono-semantic publish
 npm mono-semantic post
+# Update git
+git commit -a -m "Update changelogs"
+git push --tags && git push
 ```
 
 ## PRE
