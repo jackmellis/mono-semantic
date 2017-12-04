@@ -25,10 +25,11 @@ export default (
     r.ifElse(
       r.pipe(
         r.pathOr('', [ 'message' ]),
-        r.either(
+        r.anyPass([
           r.contains('404'),
           r.contains('no such package available'),
-        ),
+          r.contains('not_found'),
+        ]),
       ),
       r.pipe(
         r.tap(() => log.info(
