@@ -50,8 +50,8 @@ describe('pre / bumpDependencies', function(){
     expect(result).not.to.equal(pkg);
     expect(result.dependencies).to.deep.equal({
       external: '^0.1.0',
-      package2: '^1.2.3',
-      package3: '^2.0.0',
+      package2: '1.x.x',
+      package3: '2.x.x',
     });
   });
   it('returns the original package if no changes are made', function () {

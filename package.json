@@ -1,6 +1,6 @@
 {
   "name": "mono-semantic",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "Semantic Release for individual packages of a mono-repo",
   "main": "lib/index.js",
   "bin": {
