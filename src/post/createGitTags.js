@@ -19,6 +19,11 @@ export default (
   const name = getReleaseTagName(pkg);
   const sha = await gitHead();
 
+  if (pkg.private) {
+    log.info('post', 'Skipping relaese of package %s - private', pkg.scope);
+    return pkg;
+  }
+
   log.verbose(
     'post',
     'Creating git tag: %s (%s)',
